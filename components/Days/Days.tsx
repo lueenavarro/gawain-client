@@ -38,8 +38,6 @@ const Days = () => {
       } catch (error) {
         setTaskLists(oldTasks);
       }
-
-      await getTasks();
     }
   };
 
@@ -62,8 +60,6 @@ const Days = () => {
     } catch (error) {
       setTaskLists(oldTasks);
     }
-
-    await getTasks();
   };
 
   const handleCompleteTask = async (_id: string, completed: boolean) => {
