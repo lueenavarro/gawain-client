@@ -5,7 +5,7 @@ import Day from "components/Day";
 import DragDropContext from "shared/components/DragDropContext";
 import Loading from "shared/components/Loading";
 import task from "services/taskService";
-import { DragEndResult, ITaskList } from "types";
+import { DragEndResult, ITaskList, KeyString } from "types";
 import { getMiddle } from "utils/array";
 import { addDays } from "utils/dateTime";
 
@@ -17,7 +17,7 @@ const Days = () => {
     start: firstDay,
     end: addDays(firstDay, 6),
   });
-  const [taskLists, setTaskLists] = useState(null);
+  const [taskLists, setTaskLists] = useState<KeyString<ITaskList>>(null);
 
   const getTasks = async () => {
     const data = await task.current(dates.start, dates.end);
@@ -31,7 +31,7 @@ const Days = () => {
   const handleDragEnd = async (result: DragEndResult) => {
     if (result.destination) {
       const oldTasks = cloneDeep(taskLists);
-      setTaskLists(task.optimisticMove(oldTasks, result));
+      setTaskLists(task.optimisticMove(taskLists, result));
 
       try {
         await task.move(result);
@@ -53,14 +53,22 @@ const Days = () => {
     next();
   };
 
-  const handleRemoveTask = async (_id: string) => {
-    await task.remove(_id);
+  const handleRemoveTask = async (_id: string, date: string) => {
+    const oldTasks = cloneDeep(taskLists);
+    setTaskLists(task.optimisticRemove(taskLists, _id, date));
+
+    try {
+      await task.remove(_id);
+    } catch (error) {
+      setTaskLists(oldTasks);
+    }
+
     await getTasks();
-  }
-  
+  };
+
   const handleCompleteTask = async (_id: string, completed: boolean) => {
-    await task.complete(_id, completed)
-    await getTasks()
+    await task.complete(_id, completed);
+    await getTasks();
   };
 
   const next = () =>
@@ -74,7 +82,7 @@ const Days = () => {
       start: addDays(dates.start, -1),
       end: addDays(dates.end, -1),
     });
-    
+
   return (
     <>
       {!taskLists && <Loading />}

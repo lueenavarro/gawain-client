@@ -17,7 +17,7 @@ const Day = ({ day, date, tasks, onAddTask, onRemove, onComplete }) => {
         <Droppable droppableId={date}>
           {tasks.map((task, index: number) => (
             <Draggable key={task._id} draggableId={task._id} index={index}>
-              <Task task={task} onRemove={onRemove} onComplete={onComplete} />
+              <Task task={task} date={date} onRemove={onRemove} onComplete={onComplete} />
             </Draggable>
           ))}
           <AddTask

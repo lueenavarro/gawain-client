@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import styles from "./Task.module.scss";
 
 const Task = (props) => {
-  const { task, onRemove, onComplete, snapshot } = props;
+  const { task, date, onRemove, onComplete, snapshot } = props;
 
   const taskBgClass = () =>
     `${styles.task} ${snapshot.isDragging ? styles["task--active"] : ""}`;
@@ -22,7 +22,7 @@ const Task = (props) => {
       </span>
       <div
         className={styles["task__delete"]}
-        onClick={(e) => {e.stopPropagation(); onRemove(task._id)}}
+        onClick={(e) => {e.stopPropagation(); onRemove(task._id, date)}}
         data-testid="remove"
       >
         x
@@ -34,6 +34,7 @@ const Task = (props) => {
 
 Task.propTypes = {
   task: PropTypes.any.isRequired,
+  date: PropTypes.string.isRequired,
   onRemove: PropTypes.func.isRequired,
   onComplete: PropTypes.func.isRequired,
   snapshot: PropTypes.any,
