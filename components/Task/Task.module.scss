@@ -1,0 +1,64 @@
+@use "styles/colors";
+
+.task {
+  height: 30px;
+  padding-top: 1.5px;
+  position: relative;
+  box-sizing: border-box;
+
+  &--active {
+    background-color: colors.$lightgray;
+    pointer-events: "none";
+  }
+
+  &--completed {
+    color: colors.$gray;
+    text-decoration: line-through;
+  }
+
+  &__wrapper {
+    position: relative;
+    min-height: 28.5px;
+    padding: 0 20px;
+    box-sizing: border-box;
+    overflow: hidden;
+    display: flex;
+  }
+
+  &__text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
+    margin-right: 10px;
+    padding: 5px 0;
+  }
+
+  &:hover {
+    z-index: 10;
+
+    .task__wrapper {
+      background-color: colors.$lightgray;
+      overflow: visible;
+    }
+
+    .task__text {
+      overflow: visible;
+      white-space: unset;
+      word-break: break-all;
+    }
+
+    .task__delete {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+
+  &__delete {
+    display: none;
+    margin-left: auto;
+    cursor: pointer;
+    width: 25px;
+  }
+}

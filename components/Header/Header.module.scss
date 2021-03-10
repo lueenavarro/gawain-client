@@ -1,0 +1,25 @@
+@use "styles/colors";
+@use "styles/mixins";
+
+.header {
+  height: 50px;
+  background-color: colors.$primary;
+  color: colors.$white;
+
+  &__container {
+    @include mixins.container;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+
+  &__title {
+    font-weight: bold;
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+      color: gray;
+    }
+  }
+}

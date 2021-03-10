@@ -1,0 +1,43 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot matches 1`] = `
+<div
+  className="day"
+>
+  <h3
+    className="day__name"
+    data-testid="day"
+  >
+    Monday
+  </h3>
+  <h5
+    className="day__date"
+    data-testid="date"
+  >
+    February 28
+  </h5>
+  <div
+    className="day__bg"
+  >
+    <div>
+      <div>
+        <span
+          data-testid="task"
+        >
+          Go To Market
+        </span>
+      </div>
+      <div>
+        <span
+          data-testid="task"
+        >
+          Go To Gym
+        </span>
+      </div>
+      <input
+        type="text"
+      />
+    </div>
+  </div>
+</div>
+`;

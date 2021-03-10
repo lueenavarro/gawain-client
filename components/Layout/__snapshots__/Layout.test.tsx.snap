@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot matches 1`] = `
+<main
+  className="layout__main"
+  data-testid="main"
+>
+  <p>
+    Hello world!
+  </p>
+  <p>
+    Hi There!
+  </p>
+</main>
+`;

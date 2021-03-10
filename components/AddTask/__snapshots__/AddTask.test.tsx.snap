@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot matches 1`] = `
+<input
+  className="add-task"
+  data-testid="addTaskInput"
+  onBlur={[Function]}
+  onChange={[Function]}
+  onKeyPress={[Function]}
+  value=""
+/>
+`;

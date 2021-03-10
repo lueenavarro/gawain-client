@@ -1,0 +1,39 @@
+{
+  "name": "onestep-client",
+  "version": "0.1.0",
+  "author": "Louie Navarro",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "jest --watchAll"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
+    "next": "10.0.7",
+    "react": "17.0.1",
+    "react-beautiful-dnd": "^13.0.0",
+    "react-dom": "17.0.1",
+    "react-toastify": "^7.0.3",
+    "sass": "^1.32.8"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^5.11.9",
+    "@testing-library/react": "^11.2.5",
+    "@types/jest": "^26.0.20",
+    "@types/lodash": "^4.14.168",
+    "@types/node": "^14.14.31",
+    "@types/react": "^17.0.2",
+    "@types/react-beautiful-dnd": "^13.0.0",
+    "@types/react-dom": "^17.0.1",
+    "@types/react-test-renderer": "^17.0.1",
+    "babel-jest": "^26.6.3",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^26.6.3",
+    "react-test-renderer": "^17.0.1",
+    "typescript": "^4.2.2"
+  }
+}
