@@ -38,6 +38,8 @@ const Days = () => {
       } catch (error) {
         setTaskLists(oldTasks);
       }
+
+      await getTasks();
     }
   };
 
