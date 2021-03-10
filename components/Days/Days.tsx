@@ -21,7 +21,6 @@ const Days = () => {
 
   const getTasks = async () => {
     const data = await task.current(dates.start, dates.end);
-    console.log(data);
     setTaskLists(data);
   };
 

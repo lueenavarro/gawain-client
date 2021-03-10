@@ -2,7 +2,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 axios.interceptors.request.use((config) => {
-  console.log(process.env.API_URL);
   config.baseURL = process.env.API_URL || "http://localhost:5000";
   return config;
 });
