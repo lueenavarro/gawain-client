@@ -1,15 +1,16 @@
 import { cloneDeep } from "lodash";
-import ObjectID from "bson-objectid";
+import { createObjectID } from "mongo-object-reader";
 
 import httpService from "./httpService";
 import { insert } from "utils/array";
 import { formatDateForApi } from "utils/dateTime";
-import { DragEndResult, KeyString, ITaskList } from "types";
+import { DragEndResult, KeyString, ITaskList, ITask } from "types";
 
-const add = async (task: string, date: string) => {
+const add = async (newTask: ITask, date: string) => {
   await httpService.post("/tasks", {
+    _id: newTask._id,
+    task: newTask.task,
     date,
-    task,
   });
 };
 
@@ -19,12 +20,13 @@ const optimisticAdd = (
   date: string
 ) => {
   const dataClone = cloneDeep(data);
-  dataClone[date].tasks.push({
-    _id: _generateId(),
+  const newTask = {
+    _id: createObjectID(),
     task,
     completed: false,
-  });
-  return dataClone;
+  };
+  dataClone[date].tasks.push(newTask);
+  return { task: newTask, data: dataClone };
 };
 
 const current = (start: Date, end: Date) => {
@@ -92,8 +94,6 @@ const optimisticComplete = (
   dataClone[date].tasks[index].completed = completed;
   return dataClone;
 };
-
-const _generateId = () => ObjectID.createFromTime(Date.now()).toHexString();
 
 export default {
   add,

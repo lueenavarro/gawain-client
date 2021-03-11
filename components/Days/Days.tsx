@@ -47,11 +47,12 @@ const Days = () => {
     date: string
   ) => {
     const oldTasks = cloneDeep(taskLists);
-    setTaskLists(task.optimisticAdd(taskLists, newTask, date));
+    const { task: newTaskObj, data } = task.optimisticAdd(taskLists, newTask, date);
+    setTaskLists(data);
     next();
 
     try {
-      await task.add(newTask, date);
+      await task.add(newTaskObj, date);
     } catch (error) {
       setTaskLists(oldTasks);
     }
