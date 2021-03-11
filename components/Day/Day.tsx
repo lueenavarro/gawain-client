@@ -11,20 +11,24 @@ import styles from "./Day.module.scss";
 const Day = ({ day, date, tasks, onAddTask, onRemove, onComplete }) => {
   return (
     <div className={styles.day}>
-      <h3 className={styles["day__name"]} data-testid="day">{day}</h3>
-      <h5 className={styles["day__date"]} data-testid="date">{formatDate(date)}</h5>
+      <h3 className={styles["day__name"]} data-testid="day">
+        {day}
+      </h3>
+      <h5 className={styles["day__date"]} data-testid="date">
+        {formatDate(date)}
+      </h5>
       <div className={styles["day__bg"]}>
         <Droppable droppableId={date}>
           {tasks.map((task, index: number) => (
             <Draggable key={task._id} draggableId={task._id} index={index}>
-              <Task task={task} date={date} onRemove={onRemove} onComplete={onComplete} />
+              <Task
+                task={task}
+                onRemove={(...args) => onRemove(...args, date)}
+                onComplete={(...args) => onComplete(...args, date)}
+              />
             </Draggable>
           ))}
-          <AddTask
-            onAddTask={(task: string, next: Function) =>
-              onAddTask(task, date, next)
-            }
-          />
+          <AddTask onAddTask={(...args) => onAddTask(...args, date)} />
         </Droppable>
       </div>
     </div>

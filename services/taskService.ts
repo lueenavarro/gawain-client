@@ -17,7 +17,11 @@ const optimisticAdd = (
   date: string
 ) => {
   const dataClone = cloneDeep(data);
-  dataClone[date].tasks.push({ _id: Date.now().toString(), task });
+  dataClone[date].tasks.push({
+    _id: Date.now().toString(),
+    task,
+    completed: false,
+  });
   return dataClone;
 };
 
@@ -75,6 +79,18 @@ const complete = async (_id: string, completed: boolean) => {
   await httpService.patch(`/tasks/complete/${_id}`, { completed });
 };
 
+const optimisticComplete = (
+  data: KeyString<ITaskList>,
+  _id: string,
+  completed: boolean,
+  date: string
+) => {
+  const dataClone = cloneDeep(data);
+  const index = dataClone[date].tasks.findIndex((task) => task._id == _id);
+  dataClone[date].tasks[index].completed = completed;
+  return dataClone;
+};
+
 export default {
   add,
   optimisticAdd,
@@ -84,4 +100,5 @@ export default {
   remove,
   optimisticRemove,
   complete,
+  optimisticComplete,
 };

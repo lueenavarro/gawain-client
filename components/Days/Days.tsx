@@ -28,7 +28,7 @@ const Days = () => {
     getTasks();
   }, [dates]);
 
-  const handleDragEnd = async (result: DragEndResult) => {
+  const handleMoveTask = async (result: DragEndResult) => {
     if (result.destination) {
       const oldTasks = cloneDeep(taskLists);
       setTaskLists(task.optimisticMove(taskLists, result));
@@ -43,8 +43,8 @@ const Days = () => {
 
   const handleAddTask = async (
     newTask: string,
-    date: string,
-    next: Function
+    next: Function,
+    date: string
   ) => {
     const oldTasks = cloneDeep(taskLists);
     setTaskLists(task.optimisticAdd(taskLists, newTask, date));
@@ -69,9 +69,19 @@ const Days = () => {
     }
   };
 
-  const handleCompleteTask = async (_id: string, completed: boolean) => {
-    await task.complete(_id, completed);
-    await getTasks();
+  const handleCompleteTask = async (
+    _id: string,
+    completed: boolean,
+    date: string
+  ) => {
+    const oldTasks = cloneDeep(taskLists);
+    setTaskLists(task.optimisticComplete(taskLists, _id, completed, date));
+
+    try {
+      await task.complete(_id, completed);
+    } catch (error) {
+      setTaskLists(oldTasks);
+    }
   };
 
   const next = () =>
@@ -95,7 +105,7 @@ const Days = () => {
             <div className={styles.arrow}></div>
           </div>
           <div className={styles["days__slide"]}>
-            <DragDropContext onDragEnd={handleDragEnd}>
+            <DragDropContext onDragEnd={handleMoveTask}>
               {getMiddle(Object.values(taskLists)).map(
                 (taskList: ITaskList) => (
                   <Day
