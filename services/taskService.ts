@@ -20,7 +20,7 @@ const optimisticAdd = (
 ) => {
   const dataClone = cloneDeep(data);
   dataClone[date].tasks.push({
-    _id: ObjectID.generate(Date.now()),
+    _id: _generateId(),
     task,
     completed: false,
   });
@@ -92,6 +92,8 @@ const optimisticComplete = (
   dataClone[date].tasks[index].completed = completed;
   return dataClone;
 };
+
+const _generateId = () => ObjectID.createFromTime(Date.now()).toHexString();
 
 export default {
   add,
