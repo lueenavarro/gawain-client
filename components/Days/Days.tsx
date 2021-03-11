@@ -52,7 +52,6 @@ const Days = () => {
 
     try {
       await task.add(newTask, date);
-      await getTasks();
     } catch (error) {
       setTaskLists(oldTasks);
     }
