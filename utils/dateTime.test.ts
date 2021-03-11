@@ -1,7 +1,7 @@
 import { formatDate, formatDateForApi, formatDateTime } from "utils/dateTime";
 
 test("return date using default format", () => {
-  expect(formatDate("2020-02-28")).toBe("February 28");
+  expect(formatDate("2020-02-28")).toBe("February 28, 2020");
 });
 
 test("return falsy date", () => {
