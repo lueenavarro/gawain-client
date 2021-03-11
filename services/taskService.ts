@@ -1,7 +1,7 @@
 import httpService from "./httpService";
 import { insert } from "utils/array";
 import { formatDateForApi } from "utils/dateTime";
-import { DragEndResult, KeyString, ITaskList, ITask } from "types";
+import { DragEndResult, KeyString, ITaskList } from "types";
 import { cloneDeep } from "lodash";
 
 const add = async (task: string, date: string) => {
@@ -9,6 +9,16 @@ const add = async (task: string, date: string) => {
     date,
     task,
   });
+};
+
+const optimisticAdd = (
+  data: KeyString<ITaskList>,
+  task: string,
+  date: string
+) => {
+  const dataClone = cloneDeep(data);
+  dataClone[date].tasks.push({ _id: "", task });
+  return dataClone;
 };
 
 const current = (start: Date, end: Date) => {
@@ -67,6 +77,7 @@ const complete = async (_id: string, completed: boolean) => {
 
 export default {
   add,
+  optimisticAdd,
   current,
   move,
   optimisticMove,

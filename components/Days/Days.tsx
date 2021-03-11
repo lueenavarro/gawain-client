@@ -46,9 +46,16 @@ const Days = () => {
     date: string,
     next: Function
   ) => {
-    await task.add(newTask, date);
-    await getTasks();
+    const oldTasks = cloneDeep(taskLists);
+    setTaskLists(task.optimisticAdd(taskLists, newTask, date));
     next();
+
+    try {
+      await task.add(newTask, date);
+      await getTasks();
+    } catch (error) {
+      setTaskLists(oldTasks);
+    }
   };
 
   const handleRemoveTask = async (_id: string, date: string) => {
