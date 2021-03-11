@@ -52,6 +52,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      font-weight: bold;
     }
   }
 
@@ -60,5 +61,9 @@
     margin-left: auto;
     cursor: pointer;
     width: 25px;
+
+    &:hover {
+      color: colors.$red;
+    }
   }
 }

@@ -23,18 +23,16 @@ const Task = (props) => {
         <span className={taskClass()} data-testid="task">
           {task.task}
         </span>
-        {task.completed && (
-          <div
-            className={styles["task__delete"]}
-            onClick={(e) => {
-              e.stopPropagation();
-              onRemove(task._id, date);
-            }}
-            data-testid="remove"
-          >
-            x
-          </div>
-        )}
+        <div
+          className={styles["task__delete"]}
+          onClick={(e) => {
+            e.stopPropagation();
+            onRemove(task._id, date);
+          }}
+          data-testid="remove"
+        >
+          x
+        </div>
       </div>
     </div>
   );
