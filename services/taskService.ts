@@ -17,7 +17,7 @@ const optimisticAdd = (
   date: string
 ) => {
   const dataClone = cloneDeep(data);
-  dataClone[date].tasks.push({ _id: "", task });
+  dataClone[date].tasks.push({ _id: Date.now().toString(), task });
   return dataClone;
 };
 
