@@ -15,18 +15,18 @@ const add = async (newTask: ITask, date: string) => {
 };
 
 const optimisticAdd = (
-  data: KeyString<ITaskList>,
+  taskLists: KeyString<ITaskList>,
   task: string,
   date: string
 ) => {
-  const dataClone = cloneDeep(data);
+  const dataClone = cloneDeep(taskLists);
   const newTask = {
     _id: createObjectID(),
     task,
     completed: false,
   };
   dataClone[date].tasks.push(newTask);
-  return { task: newTask, data: dataClone };
+  return { task: newTask, taskLists: dataClone };
 };
 
 const current = (start: Date, end: Date) => {
@@ -50,10 +50,10 @@ const move = async ({ destination, source, draggableId }: DragEndResult) => {
 };
 
 const optimisticMove = (
-  data: KeyString<ITaskList>,
+  taskLists: KeyString<ITaskList>,
   { destination, source }: Partial<DragEndResult>
 ) => {
-  const dataClone = cloneDeep(data);
+  const dataClone = cloneDeep(taskLists);
   const task = dataClone[source.droppableId].tasks.splice(source.index, 1);
   dataClone[destination.droppableId].tasks = insert(
     dataClone[destination.droppableId].tasks,
@@ -68,11 +68,11 @@ const remove = async (_id: string) => {
 };
 
 const optimisticRemove = (
-  data: KeyString<ITaskList>,
+  taskLists: KeyString<ITaskList>,
   _id: string,
   date: string
 ) => {
-  const dataClone = cloneDeep(data);
+  const dataClone = cloneDeep(taskLists);
   const index = dataClone[date].tasks.findIndex((task) => task._id === _id);
   dataClone[date].tasks.splice(index, 1);
 

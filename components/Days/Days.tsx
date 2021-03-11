@@ -28,6 +28,27 @@ const Days = () => {
     getTasks();
   }, [dates]);
 
+  const handleAddTask = async (
+    newTask: string,
+    next: Function,
+    date: string
+  ) => {
+    const oldTasks = cloneDeep(taskLists);
+    const { task: newTaskObj, taskLists: newTaskLists } = task.optimisticAdd(
+      taskLists,
+      newTask,
+      date
+    );
+    setTaskLists(newTaskLists);
+    next();
+
+    try {
+      await task.add(newTaskObj, date);
+    } catch (error) {
+      setTaskLists(oldTasks);
+    }
+  };
+
   const handleMoveTask = async (result: DragEndResult) => {
     if (result.destination) {
       const oldTasks = cloneDeep(taskLists);
@@ -38,23 +59,6 @@ const Days = () => {
       } catch (error) {
         setTaskLists(oldTasks);
       }
-    }
-  };
-
-  const handleAddTask = async (
-    newTask: string,
-    next: Function,
-    date: string
-  ) => {
-    const oldTasks = cloneDeep(taskLists);
-    const { task: newTaskObj, data } = task.optimisticAdd(taskLists, newTask, date);
-    setTaskLists(data);
-    next();
-
-    try {
-      await task.add(newTaskObj, date);
-    } catch (error) {
-      setTaskLists(oldTasks);
     }
   };
 
