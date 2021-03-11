@@ -1,8 +1,10 @@
+import { cloneDeep } from "lodash";
+import ObjectID from "bson-objectid";
+
 import httpService from "./httpService";
 import { insert } from "utils/array";
 import { formatDateForApi } from "utils/dateTime";
 import { DragEndResult, KeyString, ITaskList } from "types";
-import { cloneDeep } from "lodash";
 
 const add = async (task: string, date: string) => {
   await httpService.post("/tasks", {
@@ -18,7 +20,7 @@ const optimisticAdd = (
 ) => {
   const dataClone = cloneDeep(data);
   dataClone[date].tasks.push({
-    _id: Date.now().toString(),
+    _id: ObjectID.generate(Date.now()),
     task,
     completed: false,
   });
