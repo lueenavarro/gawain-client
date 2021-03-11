@@ -8,7 +8,10 @@ const Task = (props) => {
 
   const taskBgClass = () =>
     `${styles.task} ${snapshot.isDragging ? styles["task--active"] : ""}`;
-  const taskClass = () => `${styles["task__text"]} ${task.completed ? styles["task--completed"] : ""}`;
+  const taskClass = () =>
+    `${styles["task__text"]} ${
+      task.completed ? styles["task--completed"] : ""
+    }`;
 
   return (
     <div
@@ -17,16 +20,21 @@ const Task = (props) => {
       data-testid="taskBg"
     >
       <div className={styles["task__wrapper"]}>
-      <span className={taskClass()} data-testid="task">
-        {task.task}
-      </span>
-      <div
-        className={styles["task__delete"]}
-        onClick={(e) => {e.stopPropagation(); onRemove(task._id, date)}}
-        data-testid="remove"
-      >
-        x
-      </div>
+        <span className={taskClass()} data-testid="task">
+          {task.task}
+        </span>
+        {task.completed && (
+          <div
+            className={styles["task__delete"]}
+            onClick={(e) => {
+              e.stopPropagation();
+              onRemove(task._id, date);
+            }}
+            data-testid="remove"
+          >
+            x
+          </div>
+        )}
       </div>
     </div>
   );
