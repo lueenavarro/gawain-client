@@ -7,9 +7,15 @@ import Task from "./Task";
 
 const mockOnRemove = jest.fn((_id: string) => {});
 const mockOnComplete = jest.fn(() => {});
-const fakeTask = { _id: "1234", task: "Go To Market" };
-const fakeSnapshot = { isDragging: false };
 
+let fakeTask;
+let fakeSnapshot;
+beforeEach(()=> {
+  fakeTask = { _id: "1234", task: "Go To Market", completed: false };
+  fakeSnapshot =  { isDragging: false };
+  mockOnRemove.mockClear();
+  mockOnComplete.mockClear()
+})
 afterEach(cleanup);
 
 test("render without crashing", () => {
@@ -61,6 +67,20 @@ test("call onRemove when x is clicked", () => {
   );
   getByTestId("remove").click();
   expect(mockOnRemove).toBeCalledWith("1234");
+});
+
+test("change of style whent task completed", () => {
+  fakeTask.completed = true;
+  const { getByTestId } = render(
+    <Task
+      task={fakeTask}
+      onRemove={mockOnRemove}
+      snapshot={fakeSnapshot}
+      onComplete={mockOnComplete}
+    />
+  );
+  ;
+  expect(getByTestId("task").className).toBe("task__text task--completed");
 });
 
 test("snapshot matches", () => {

@@ -2,7 +2,7 @@
 
 exports[`snapshot matches 1`] = `
 <div
-  className="task task--active"
+  className="task "
   data-testid="taskBg"
   onClick={[Function]}
 >
