@@ -14,9 +14,13 @@ jest.mock("./httpService", () => ({
 }));
 
 test("call to add task endpoint", async () => {
-  await task.add("Go To Market", "2021-02-28");
+  await task.add(
+    { _id: "1234", task: "Go To Market", completed: false },
+    "2021-02-28"
+  );
 
   expect(httpService.post).toHaveBeenCalledWith("/tasks", {
+    _id: "1234",
     task: "Go To Market",
     date: "2021-02-28",
   });
@@ -65,6 +69,7 @@ test("optimistic move", async () => {
         {
           _id: "1234",
           task: "Go To Market",
+          completed: false,
         },
       ],
     },
@@ -75,6 +80,7 @@ test("optimistic move", async () => {
         {
           _id: "4567",
           task: "Go To Gym",
+          completed: true,
         },
       ],
     },
@@ -104,10 +110,12 @@ test("optimistic move", async () => {
         {
           _id: "1234",
           task: "Go To Market",
+          completed: false,
         },
         {
           _id: "4567",
           task: "Go To Gym",
+          completed: true,
         },
       ],
     },
