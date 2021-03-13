@@ -12,7 +12,7 @@ export const formatDateForApi = (date: string | Date, format = "YYYY-MM-DD") =>
   date ? moment(date).format(format) : date;
 
 export const addDays = (date: Date, days: number) => {
-  const result = new Date(date);
+  const result = new Date(date.getTime());
   result.setDate(result.getDate() + days);
   return result;
 };

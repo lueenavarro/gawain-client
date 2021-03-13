@@ -3,18 +3,12 @@
 
 .days {
   @include mixins.container;
-  display: flex;
-  height: 50%;
   margin-top: 20px;
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) 2.5rem;
+  min-height: 50vh;
 
   &__slide {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    flex: 1;
-
-    & > :last-child {
-      border-right: 1px solid colors.$border;
-    }
   }
 }
 
