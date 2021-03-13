@@ -32,4 +32,6 @@ npm run test
 
 ### Deployment
 
-The application is deployed in netlify.com, the code will automatically be deployed for every changed pushed to the main branch. See site at `https://onestep-client.netlify.app/`
+Application link: https://onestep-client.netlify.app/
+
+The code will automatically be deployed for every changed pushed to the main branch.
