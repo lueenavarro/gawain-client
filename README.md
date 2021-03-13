@@ -10,6 +10,8 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+<hr>
+
 ### Testing
 
 To run the jest unit tests:
@@ -18,11 +20,15 @@ To run the jest unit tests:
 npm run test
 ```
 
+<hr>
+
 ### Environment Variables
 
 | variable | default               |
 | -------- | --------------------- |
 | API_URL  | http://localhost:5000 |
+
+<hr>
 
 ### Deployment
 
