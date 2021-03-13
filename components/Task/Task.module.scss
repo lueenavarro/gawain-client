@@ -45,7 +45,7 @@
     .task__text {
       overflow: visible;
       white-space: unset;
-      word-break: break-all;
+      word-break: break-word;
     }
 
     .task__delete {
