@@ -34,4 +34,4 @@ npm run test
 
 Application link: https://onestep-client.netlify.app/
 
-The code will automatically be deployed for every changed pushed to the main branch.
+The code will automatically be deployed for every changes pushed to the main branch.
