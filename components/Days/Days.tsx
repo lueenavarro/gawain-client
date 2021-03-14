@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { cloneDeep } from "lodash";
 import SwiperCore, { Navigation, Controller } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -17,12 +17,11 @@ SwiperCore.use([Controller, Navigation]);
 const Days = () => {
   const [taskDates, setTaskDates] = useState<KeyString<ITaskList>>({});
   const [taskArray, setTaskArray] = useState<ITaskList[]>([]);
-  const [swiperInstance, setSwiperInstance] = useState<SwiperCore>(null);
+  const swiperInstance = useRef<SwiperCore>(null);
   const [dates, setDates] = useState(() => {
-    const initialFirstDay = addDays(new Date(), -2);
     return {
-      start: initialFirstDay,
-      end: addDays(initialFirstDay, 7),
+      start: addDays(new Date(), -30),
+      end: addDays(new Date(), 30),
       addToEnd: true,
     };
   });
@@ -41,9 +40,11 @@ const Days = () => {
     );
   }, [taskDates]);
 
-  useEffect(()=> {
-    swiperInstance?.updateSlides()
-  }, [taskArray])
+  useEffect(() => {
+    if (!dates.addToEnd) {
+      swiperInstance.current?.slideTo(7, 0);
+    }
+  }, [taskArray]);
 
   const handleAddTask = async (
     newTask: string,
@@ -107,10 +108,10 @@ const Days = () => {
   };
 
   const next = () => {
-    swiperInstance.slideNext();
-    if (swiperInstance.isEnd) {
+    swiperInstance.current.slideNext();
+    if (swiperInstance.current.isEnd) {
       const newStartDate = addDays(
-        new Date(taskArray[swiperInstance.slides.length - 1].date),
+        new Date(taskArray[swiperInstance.current?.slides.length - 1].date),
         1
       );
       setDates({
@@ -122,8 +123,8 @@ const Days = () => {
   };
 
   const prev = () => {
-    swiperInstance.slidePrev();
-    if (swiperInstance.isBeginning) {
+    swiperInstance.current.slidePrev();
+    if (swiperInstance.current.isBeginning) {
       const newEndDate = addDays(new Date(taskArray[0].date), -1);
       setDates({
         start: addDays(newEndDate, -7),
@@ -143,13 +144,16 @@ const Days = () => {
           </div>
           <div className={styles["days__slide"]}>
             <DragDropContext onDragEnd={handleMoveTask}>
-              <Swiper controller={{ control: swiperInstance }}></Swiper>
+              <Swiper controller={{ control: swiperInstance.current }}></Swiper>
               <Swiper
                 slidesPerView={5}
                 spaceBetween={0}
                 noSwiping={true}
                 allowTouchMove={false}
-                onSwiper={(swiper) => setSwiperInstance(swiper)}
+                onSwiper={(swiper) => {
+                  swiper.slideTo(29, 0);
+                  swiperInstance.current = swiper;
+                }}
                 onSlideChange={() => console.log("slide change")}
               >
                 {taskArray.map((taskList: ITaskList) => (
