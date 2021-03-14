@@ -15,65 +15,79 @@ import styles from "./Days.module.scss";
 SwiperCore.use([Controller, Navigation]);
 
 const Days = () => {
-  const [taskLists, setTaskLists] = useState<KeyString<ITaskList>>({});
-  const [taskListArray, setTaskListArray] = useState<ITaskList[]>([]);
+  const [taskDates, setTaskDates] = useState<KeyString<ITaskList>>({});
+  const [taskArray, setTaskArray] = useState<ITaskList[]>([]);
   const [swiperInstance, setSwiperInstance] = useState<SwiperCore>(null);
-  
-  const initialFirstDay = addDays(new Date(), -2);
-  const [dates, setDates] = useState({
-    start: initialFirstDay,
-    end: addDays(initialFirstDay, 7),
+  const [dates, setDates] = useState(() => {
+    const initialFirstDay = addDays(new Date(), -2);
+    return {
+      start: initialFirstDay,
+      end: addDays(initialFirstDay, 7),
+      addToEnd: true,
+    };
   });
 
   useEffect(() => {
     task.current(dates.start, dates.end).then((tasks) => {
-      setTaskListArray([...taskListArray, ...Object.values(tasks)]);
-      setTaskLists({ ...taskLists, ...tasks });
+      setTaskDates(tasks);
     });
   }, [dates]);
+
+  useEffect(() => {
+    setTaskArray((state) =>
+      dates.addToEnd
+        ? state.concat(Object.values(taskDates))
+        : Object.values(taskDates).concat(state)
+    );
+  }, [taskDates]);
+
+  useEffect(()=> {
+    swiperInstance?.updateSlides()
+  }, [taskArray])
 
   const handleAddTask = async (
     newTask: string,
     next: Function,
     date: string
   ) => {
-    const oldTasks = cloneDeep(taskLists);
+    const oldTasks = cloneDeep(taskDates);
     const { task: newTaskObj, taskLists: newTaskLists } = task.optimisticAdd(
-      taskLists,
+      taskDates,
       newTask,
       date
     );
-    setTaskLists(newTaskLists);
+    setTaskDates(newTaskLists);
     next();
 
     try {
       await task.add(newTaskObj, date);
     } catch (error) {
-      setTaskLists(oldTasks);
+      setTaskDates(oldTasks);
     }
   };
 
   const handleMoveTask = async (result: DragEndResult) => {
     if (result.destination) {
-      const oldTasks = cloneDeep(taskLists);
-      setTaskLists(task.optimisticMove(taskLists, result));
+      const oldTasks = cloneDeep(taskDates);
+      setTaskDates(task.optimisticMove(taskDates, result));
+      setTaskArray(Object.values(task.optimisticMove(taskDates, result)));
 
       try {
         await task.move(result);
       } catch (error) {
-        setTaskLists(oldTasks);
+        setTaskDates(oldTasks);
       }
     }
   };
 
   const handleRemoveTask = async (_id: string, date: string) => {
-    const oldTasks = cloneDeep(taskLists);
-    setTaskLists(task.optimisticRemove(taskLists, _id, date));
+    const oldTasks = cloneDeep(taskDates);
+    setTaskDates(task.optimisticRemove(taskDates, _id, date));
 
     try {
       await task.remove(_id);
     } catch (error) {
-      setTaskLists(oldTasks);
+      setTaskDates(oldTasks);
     }
   };
 
@@ -82,65 +96,76 @@ const Days = () => {
     completed: boolean,
     date: string
   ) => {
-    const oldTasks = cloneDeep(taskLists);
-    setTaskLists(task.optimisticComplete(taskLists, _id, completed, date));
+    const oldTasks = cloneDeep(taskDates);
+    setTaskDates(task.optimisticComplete(taskDates, _id, completed, date));
 
     try {
       await task.complete(_id, completed);
     } catch (error) {
-      setTaskLists(oldTasks);
+      setTaskDates(oldTasks);
     }
   };
 
-  const handleReachEnd = () => {
-    const newStartDate = addDays(dates.end, 1);
-    setDates({
-      start: newStartDate,
-      end: addDays(newStartDate, 7),
-    });
+  const next = () => {
+    swiperInstance.slideNext();
+    if (swiperInstance.isEnd) {
+      const newStartDate = addDays(
+        new Date(taskArray[swiperInstance.slides.length - 1].date),
+        1
+      );
+      setDates({
+        start: newStartDate,
+        end: addDays(newStartDate, 7),
+        addToEnd: true,
+      });
+    }
+  };
+
+  const prev = () => {
+    swiperInstance.slidePrev();
+    if (swiperInstance.isBeginning) {
+      const newEndDate = addDays(new Date(taskArray[0].date), -1);
+      setDates({
+        start: addDays(newEndDate, -7),
+        end: newEndDate,
+        addToEnd: false,
+      });
+    }
   };
 
   return (
     <>
-      {taskListArray.length === 0 && <Loading />}
-      {taskListArray.length > 0 && (
+      {taskArray.length === 0 && <Loading />}
+      {taskArray.length > 0 && (
         <section className={styles.days}>
-          <div
-            className={styles.prev}
-            onClick={() => swiperInstance.slidePrev()}
-          >
+          <div className={styles.prev} onClick={() => prev()}>
             <div className={styles.arrow}></div>
           </div>
           <div className={styles["days__slide"]}>
             <DragDropContext onDragEnd={handleMoveTask}>
               <Swiper controller={{ control: swiperInstance }}></Swiper>
-                <Swiper
-                  slidesPerView={5}
-                  spaceBetween={0}
-                  noSwiping={true}
-                  allowTouchMove={false}
-                  initialSlide={1}
-                  onReachEnd={() => handleReachEnd()}
-                  onSwiper={(swiper) => setSwiperInstance(swiper)}
-                  onSlideChange={() => console.log("slide change")}
-                >
-                  {taskListArray.map((taskList: ITaskList) => (
-                    <SwiperSlide key={taskList.date}>
-                      <Day
-                        onAddTask={handleAddTask}
-                        onRemove={handleRemoveTask}
-                        onComplete={handleCompleteTask}
-                        {...taskList}
-                      />
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
+              <Swiper
+                slidesPerView={5}
+                spaceBetween={0}
+                noSwiping={true}
+                allowTouchMove={false}
+                onSwiper={(swiper) => setSwiperInstance(swiper)}
+                onSlideChange={() => console.log("slide change")}
+              >
+                {taskArray.map((taskList: ITaskList) => (
+                  <SwiperSlide key={taskList.date}>
+                    <Day
+                      onAddTask={handleAddTask}
+                      onRemove={handleRemoveTask}
+                      onComplete={handleCompleteTask}
+                      {...taskList}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
             </DragDropContext>
           </div>
-          <div
-            className={styles.next}
-            onClick={() => swiperInstance.slideNext()}
-          >
+          <div className={styles.next} onClick={() => next()}>
             <div className={styles.arrow}></div>
           </div>
         </section>
