@@ -15,12 +15,13 @@ SwiperCore.use([Controller, Navigation]);
 
 const Days = () => {
   const firstDay = addDays(new Date(), -1);
+  const daysToAdd = 7
   const [dates, setDates] = useState({
-    start: addDays(firstDay, -7),
-    end: addDays(firstDay, 7),
+    start: addDays(firstDay, -daysToAdd),
+    end: addDays(firstDay, daysToAdd),
   });
   const [taskLists, setTaskLists] = useState(null);
-  const swiperInstance = useRef<SwiperCore>(null);
+  const swiper = useRef<SwiperCore>(null);
 
   useEffect(() => {
     task.current(dates.start, dates.end).then((data) => setTaskLists(data));
@@ -87,7 +88,7 @@ const Days = () => {
   };
 
   const next = () => {
-    swiperInstance.current.slideNext()
+    swiper.current.slideNext()
     onEndReached();
   };
 
@@ -96,35 +97,33 @@ const Days = () => {
   }, [taskLists])
 
   const onEndReached = async () => {
-    if (swiperInstance.current.isEnd) {
-      const numberOfDaysToAdd = 7;
+    if (swiper.current.isEnd) {
       const start = addDays(dates.end, 1);
-      const end = addDays(start, numberOfDaysToAdd);
+      const end = addDays(start, daysToAdd);
 
       const data = await task.current(start, end);
       await setTaskLists({ ...taskLists, ...data });
-      swiperInstance.current.removeSlide(range(0, numberOfDaysToAdd));
+      swiper.current.removeSlide(range(0, daysToAdd));
       setDates({ start, end });
     }
   }
 
   const prev = async () => {
-    swiperInstance.current.slidePrev()
+    swiper.current.slidePrev()
     handleBeginningReached();
   };
 
   const handleBeginningReached = async () => {
-    if (swiperInstance.current.activeIndex === 1) {
-      const numberOfDaysToAdd = 7;
-      const start = addDays(dates.start, -numberOfDaysToAdd);
+    if (swiper.current.activeIndex === 1) {
+      const start = addDays(dates.start, -daysToAdd);
       const end = addDays(dates.start, -1);
 
       const data = await task.current(start, end);
       await setTaskLists({ ...data, ...taskLists });
-      swiperInstance.current.slideTo(numberOfDaysToAdd + 1, 0);
-      swiperInstance.current.removeSlide(range(
-        swiperInstance.current.slides.length - numberOfDaysToAdd, 
-        swiperInstance.current.slides.length));
+      swiper.current.slideTo(daysToAdd + 1, 0);
+      swiper.current.removeSlide(range(
+        swiper.current.slides.length - daysToAdd, 
+        swiper.current.slides.length));
       setDates({ start, end });
     }
   }
@@ -144,11 +143,11 @@ const Days = () => {
           <div className={styles.prev} onClick={prev}>
             <div className={styles.arrow}></div>
           </div>
-          <Swiper controller={{ control: swiperInstance.current }}></Swiper>
+          <Swiper controller={{ control: swiper.current }}></Swiper>
           <Swiper
             breakpoints={breakpoints}
-            onSwiper={(swiper) => swiperInstance.current = swiper}
-            initialSlide={8}
+            initialSlide={daysToAdd + 1}
+            onSwiper={(swiperCore) => swiper.current = swiperCore}
           >
             {Object.values(taskLists).map((taskList: ITaskList) => (
               <SwiperSlide key={taskList.date}>
