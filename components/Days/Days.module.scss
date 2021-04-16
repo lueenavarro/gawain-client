@@ -4,18 +4,8 @@
 .days {
   @include mixins.container;
   display: flex;
-  height: 50%;
+  min-height: 50vh;
   margin-top: 20px;
-
-  &__slide {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    flex: 1;
-
-    & > :last-child {
-      border-right: 1px solid colors.$border;
-    }
-  }
 }
 
 .arrow {
@@ -23,12 +13,12 @@
   align-items: center;
   height: 100%;
   cursor: pointer;
-  width: 2.3rem;
+  width: 1.5rem;
 
   &::after {
     content: "";
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 0.75rem;
+    height: 0.75rem;
     display: block;
     transform-origin: center;
     border-color: gray;
@@ -48,13 +38,13 @@
 .prev {
   .arrow::after {
     transform: rotate(-135deg);
+    position: relative;
+    left: 6px;
   }
 }
 
 .next {
   .arrow::after {
     transform: rotate(45deg);
-    position: relative;
-    left: 10px;
   }
 }

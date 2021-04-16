@@ -1,32 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { cloneDeep } from "lodash";
+import React, { useEffect, useRef, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Navigation, Controller } from "swiper";
+import { cloneDeep, range } from "lodash";
 
 import Day from "components/Day";
-import DragDropContext from "shared/components/DragDropContext";
 import Loading from "shared/components/Loading";
 import task from "services/taskService";
-import { DragEndResult, ITaskList, KeyString } from "types";
-import { getMiddle } from "utils/array";
+import { DragEndResult, ITaskList } from "types";
 import { addDays } from "utils/dateTime";
 
 import styles from "./Days.module.scss";
 
-const Days = () => {
-  const firstDay = addDays(new Date(), -2);
-  const [dates, setDates] = useState({
-    start: firstDay,
-    end: addDays(firstDay, 6),
-  });
-  const [taskLists, setTaskLists] = useState<KeyString<ITaskList>>(null);
+SwiperCore.use([Controller, Navigation]);
 
-  const getTasks = async () => {
-    const data = await task.current(dates.start, dates.end);
-    setTaskLists(data);
-  };
+const Days = () => {
+  const firstDay = addDays(new Date(), -1);
+  const [dates, setDates] = useState({
+    start: addDays(firstDay, -7),
+    end: addDays(firstDay, 7),
+  });
+  const [taskLists, setTaskLists] = useState(null);
+  const swiperInstance = useRef<SwiperCore>(null);
 
   useEffect(() => {
-    getTasks();
-  }, [dates]);
+    task.current(dates.start, dates.end).then((data) => setTaskLists(data));
+  }, []);
 
   const handleAddTask = async (
     newTask: string,
@@ -88,17 +86,55 @@ const Days = () => {
     }
   };
 
-  const next = () =>
-    setDates({
-      start: addDays(dates.start, 1),
-      end: addDays(dates.end, 1),
-    });
+  const next = () => {
+    swiperInstance.current.slideNext()
+    onEndReached();
+  };
 
-  const prev = () =>
-    setDates({
-      start: addDays(dates.start, -1),
-      end: addDays(dates.end, -1),
-    });
+  useEffect(()=> {
+
+  }, [taskLists])
+
+  const onEndReached = async () => {
+    if (swiperInstance.current.isEnd) {
+      const numberOfDaysToAdd = 7;
+      const start = addDays(dates.end, 1);
+      const end = addDays(start, numberOfDaysToAdd);
+
+      const data = await task.current(start, end);
+      await setTaskLists({ ...taskLists, ...data });
+      swiperInstance.current.removeSlide(range(0, numberOfDaysToAdd));
+      setDates({ start, end });
+    }
+  }
+
+  const prev = async () => {
+    swiperInstance.current.slidePrev()
+    handleBeginningReached();
+  };
+
+  const handleBeginningReached = async () => {
+    if (swiperInstance.current.activeIndex === 1) {
+      const numberOfDaysToAdd = 7;
+      const start = addDays(dates.start, -numberOfDaysToAdd);
+      const end = addDays(dates.start, -1);
+
+      const data = await task.current(start, end);
+      await setTaskLists({ ...data, ...taskLists });
+      swiperInstance.current.slideTo(numberOfDaysToAdd + 1, 0);
+      swiperInstance.current.removeSlide(range(
+        swiperInstance.current.slides.length - numberOfDaysToAdd, 
+        swiperInstance.current.slides.length));
+      setDates({ start, end });
+    }
+  }
+
+  const breakpoints = {
+    480: { slidesPerView: 1 },
+    640: { slidesPerView: 2 },
+    768: { slidesPerView: 4 },
+    1024: { slidesPerView: 5 },
+  }
 
   return (
     <>
@@ -108,21 +144,23 @@ const Days = () => {
           <div className={styles.prev} onClick={prev}>
             <div className={styles.arrow}></div>
           </div>
-          <div className={styles["days__slide"]}>
-            <DragDropContext onDragEnd={handleMoveTask}>
-              {getMiddle(Object.values(taskLists)).map(
-                (taskList: ITaskList) => (
-                  <Day
-                    key={taskList.date}
-                    onAddTask={handleAddTask}
-                    onRemove={handleRemoveTask}
-                    onComplete={handleCompleteTask}
-                    {...taskList}
-                  />
-                )
-              )}
-            </DragDropContext>
-          </div>
+          <Swiper controller={{ control: swiperInstance.current }}></Swiper>
+          <Swiper
+            breakpoints={breakpoints}
+            onSwiper={(swiper) => swiperInstance.current = swiper}
+            initialSlide={8}
+          >
+            {Object.values(taskLists).map((taskList: ITaskList) => (
+              <SwiperSlide key={taskList.date}>
+                <Day
+                  onAddTask={handleAddTask}
+                  onRemove={handleRemoveTask}
+                  onComplete={handleCompleteTask}
+                  taskList={taskList}
+                />
+              </SwiperSlide>
+            ))}
+          </Swiper>
           <div className={styles.next} onClick={next}>
             <div className={styles.arrow}></div>
           </div>

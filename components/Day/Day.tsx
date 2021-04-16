@@ -3,42 +3,33 @@ import PropTypes from "prop-types";
 
 import Task from "components/Task";
 import AddTask from "components/AddTask";
-import Droppable from "shared/components/Droppable";
-import Draggable from "shared/components/Draggable";
 import { formatDate } from "utils/dateTime";
 import styles from "./Day.module.scss";
 
-const Day = ({ day, date, tasks, onAddTask, onRemove, onComplete }) => {
-  return (
+const Day = ({ taskList, onAddTask, onRemove, onComplete }) => (
     <div className={styles.day}>
       <h3 className={styles["day__name"]} data-testid="day">
-        {day}
+        {taskList.day}
       </h3>
       <h5 className={styles["day__date"]} data-testid="date">
-        {formatDate(date)}
+        {formatDate(taskList.date)}
       </h5>
       <div className={styles["day__bg"]}>
-        <Droppable droppableId={date}>
-          {tasks.map((task, index: number) => (
-            <Draggable key={task._id} draggableId={task._id} index={index}>
+          {taskList.tasks.map((task, index) => (
               <Task
+                key={index}
                 task={task}
-                onRemove={(...args) => onRemove(...args, date)}
-                onComplete={(...args) => onComplete(...args, date)}
+                onRemove={(...args) => onRemove(...args, taskList.date)}
+                onComplete={(...args) => onComplete(...args, taskList.date)}
               />
-            </Draggable>
           ))}
-          <AddTask onAddTask={(...args) => onAddTask(...args, date)} />
-        </Droppable>
+          <AddTask onAddTask={(...args) => onAddTask(...args, taskList.date)} />
       </div>
     </div>
-  );
-};
+);
 
 Day.propTypes = {
-  day: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
-  tasks: PropTypes.any.isRequired,
+  taskList: PropTypes.any.isRequired,
   onAddTask: PropTypes.func.isRequired,
   onRemove: PropTypes.func.isRequired,
 };

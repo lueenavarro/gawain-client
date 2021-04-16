@@ -4,10 +4,8 @@ import PropTypes from "prop-types";
 import styles from "./Task.module.scss";
 
 const Task = (props) => {
-  const { task, onRemove, onComplete, snapshot } = props;
+  const { task, onRemove, onComplete } = props;
 
-  const taskBgClass = () =>
-    `${styles.task} ${snapshot.isDragging ? styles["task--active"] : ""}`;
   const taskClass = () =>
     `${styles["task__text"]} ${
       task.completed ? styles["task--completed"] : ""
@@ -15,9 +13,9 @@ const Task = (props) => {
 
   return (
     <div
-      className={taskBgClass()}
       onClick={() => onComplete(task._id, !task.completed)}
       data-testid="taskBg"
+      className={styles.task}
     >
       <div className={styles["task__wrapper"]}>
         <span className={taskClass()} data-testid="task">

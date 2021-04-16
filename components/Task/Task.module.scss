@@ -2,14 +2,8 @@
 
 .task {
   height: 30px;
-  padding-top: 1.5px;
   position: relative;
   box-sizing: border-box;
-
-  &--active {
-    background-color: colors.$lightgray;
-    pointer-events: "none";
-  }
 
   &--completed {
     color: colors.$gray;

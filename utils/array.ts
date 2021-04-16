@@ -9,3 +9,6 @@ export const insert = (array: Array<any>, index: number, item: any) => {
 };
 
 export const getMiddle = (array: Array<any>) => slice(array, 1, -1);
+
+export const range = (start: number, stop: number, step = 1) =>
+Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step)
