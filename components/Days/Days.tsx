@@ -1,26 +1,36 @@
 import React, { useEffect, useRef, useState } from "react";
+import { cloneDeep } from "lodash";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Controller } from "swiper";
-import { cloneDeep, range } from "lodash";
 
 import Day from "components/Day";
 import Loading from "shared/components/Loading";
 import task from "services/taskService";
-import { DragEndResult, ITaskList } from "types";
+import { DragEndResult, ITaskList, KeyString } from "types";
 import { addDays } from "utils/dateTime";
+import { sliceObjects } from "utils/objects";
+import { useCustomState } from "hooks/useCustomState";
 
 import styles from "./Days.module.scss";
 
 SwiperCore.use([Controller, Navigation]);
 
+const daysToAdd = 20;
+const breakpoints = {
+  320: { slidesPerView: 1 },
+  480: { slidesPerView: 2 },
+  640: { slidesPerView: 3 },
+  768: { slidesPerView: 4 },
+  1024: { slidesPerView: 5 },
+};
+
 const Days = () => {
   const firstDay = addDays(new Date(), -1);
-  const daysToAdd = 7
   const [dates, setDates] = useState({
     start: addDays(firstDay, -daysToAdd),
     end: addDays(firstDay, daysToAdd),
   });
-  const [taskLists, setTaskLists] = useState(null);
+  const [taskLists, setTaskLists] = useCustomState<KeyString<ITaskList>>(null);
   const swiper = useRef<SwiperCore>(null);
 
   useEffect(() => {
@@ -87,67 +97,76 @@ const Days = () => {
     }
   };
 
-  const next = () => {
-    swiper.current.slideNext()
-    onEndReached();
-  };
+  const handleEndReached = async () => {
+    if (swiper.current?.isEnd) {
+      setDates((dates) => {
+        const start = addDays(dates.end, 1);
+        const end = addDays(dates.end, daysToAdd);
 
-  useEffect(()=> {
+        task.current(start, end).then((data) => {
+          setTaskLists(
+            (taskLists) => {
+              const newTaskLists = sliceObjects(taskLists, 0, daysToAdd);
+              return { ...newTaskLists, ...data };
+            },
+            () => {
+              const numberOfVisibleSlides =
+                swiper.current.currentBreakpoint === "max"
+                  ? 1
+                  : breakpoints[swiper.current.currentBreakpoint].slidesPerView;
+              swiper.current.slideTo(daysToAdd - numberOfVisibleSlides + 1, 0);
+            }
+          );
+        });
 
-  }, [taskLists])
-
-  const onEndReached = async () => {
-    if (swiper.current.isEnd) {
-      const start = addDays(dates.end, 1);
-      const end = addDays(start, daysToAdd);
-
-      const data = await task.current(start, end);
-      await setTaskLists({ ...taskLists, ...data });
-      swiper.current.removeSlide(range(0, daysToAdd));
-      setDates({ start, end });
+        return { start, end };
+      });
     }
-  }
-
-  const prev = async () => {
-    swiper.current.slidePrev()
-    handleBeginningReached();
   };
 
   const handleBeginningReached = async () => {
-    if (swiper.current.activeIndex === 1) {
-      const start = addDays(dates.start, -daysToAdd);
-      const end = addDays(dates.start, -1);
+    if (swiper.current?.isBeginning) {
+      setDates((dates) => {
+        const start = addDays(dates.start, -daysToAdd);
+        const end = addDays(dates.start, -1);
 
-      const data = await task.current(start, end);
-      await setTaskLists({ ...data, ...taskLists });
-      swiper.current.slideTo(daysToAdd + 1, 0);
-      swiper.current.removeSlide(range(
-        swiper.current.slides.length - daysToAdd, 
-        swiper.current.slides.length));
-      setDates({ start, end });
+        task.current(start, end).then((data) => {
+          setTaskLists(
+            (taskLists) => {
+              const newTaskLists = sliceObjects(
+                taskLists,
+                swiper.current.slides.length - daysToAdd
+              );
+              return { ...data, ...newTaskLists };
+            },
+            () => swiper.current.slideTo(daysToAdd, 0)
+          );
+        });
+
+        return { start, end };
+      });
     }
-  }
-
-  const breakpoints = {
-    480: { slidesPerView: 1 },
-    640: { slidesPerView: 2 },
-    768: { slidesPerView: 4 },
-    1024: { slidesPerView: 5 },
-  }
+  };
 
   return (
     <>
       {!taskLists && <Loading />}
       {taskLists && (
         <section className={styles.days}>
-          <div className={styles.prev} onClick={prev}>
+          <div
+            className={styles.prev}
+            onClick={() => swiper.current.slidePrev()}
+          >
             <div className={styles.arrow}></div>
           </div>
           <Swiper controller={{ control: swiper.current }}></Swiper>
           <Swiper
             breakpoints={breakpoints}
             initialSlide={daysToAdd + 1}
-            onSwiper={(swiperCore) => swiper.current = swiperCore}
+            allowTouchMove={false}
+            onSwiper={(swiperCore) => (swiper.current = swiperCore)}
+            onSlidePrevTransitionEnd={handleBeginningReached}
+            onSlideNextTransitionEnd={handleEndReached}
           >
             {Object.values(taskLists).map((taskList: ITaskList) => (
               <SwiperSlide key={taskList.date}>
@@ -160,7 +179,10 @@ const Days = () => {
               </SwiperSlide>
             ))}
           </Swiper>
-          <div className={styles.next} onClick={next}>
+          <div
+            className={styles.next}
+            onClick={() => swiper.current.slideNext()}
+          >
             <div className={styles.arrow}></div>
           </div>
         </section>
