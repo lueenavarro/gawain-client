@@ -110,11 +110,9 @@ const Days = () => {
               return { ...newTaskLists, ...data };
             },
             () => {
-              const numberOfVisibleSlides =
-                swiper.current.currentBreakpoint === "max"
-                  ? 1
-                  : breakpoints[swiper.current.currentBreakpoint].slidesPerView;
-              swiper.current.slideTo(daysToAdd - numberOfVisibleSlides + 1, 0);
+              const visibleSlidesCount =
+                breakpoints[swiper.current.currentBreakpoint]?.slidesPerView || 1;
+              swiper.current.slideTo(daysToAdd - visibleSlidesCount + 1, 0);
             }
           );
         });
