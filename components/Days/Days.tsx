@@ -8,7 +8,7 @@ import Loading from "shared/components/Loading";
 import task from "services/taskService";
 import { DragEndResult, ITaskList, KeyString } from "types";
 import { addDays } from "utils/dateTime";
-import { sliceObjects } from "utils/objects";
+import { spliceObject } from "utils/objects";
 import { useCustomState } from "hooks/useCustomState";
 
 import styles from "./Days.module.scss";
@@ -48,8 +48,9 @@ const Days = () => {
       newTask,
       date
     );
-    setTaskLists(newTaskLists);
-    next();
+    setTaskLists(newTaskLists, () => {
+      next();
+    });
 
     try {
       await task.add(newTaskObj, date);
@@ -97,54 +98,43 @@ const Days = () => {
     }
   };
 
-  const handleEndReached = async () => {
-    if (swiper.current?.isEnd) {
-      setDates((dates) => {
-        const start = addDays(dates.end, 1);
-        const end = addDays(dates.end, daysToAdd);
+  const handleEndReached = () =>
+    swiper.current?.isEnd &&
+    setDates((dates) => {
+      const start = addDays(dates.end, 1);
+      const end = addDays(dates.end, daysToAdd);
+      task.current(start, end).then(pushTaskLists);
+      return { start, end };
+    });
 
-        task.current(start, end).then((data) => {
-          setTaskLists(
-            (taskLists) => {
-              const newTaskLists = sliceObjects(taskLists, 0, daysToAdd);
-              return { ...newTaskLists, ...data };
-            },
-            () => {
-              const visibleSlidesCount =
-                breakpoints[swiper.current.currentBreakpoint]?.slidesPerView || 1;
-              swiper.current.slideTo(daysToAdd - visibleSlidesCount + 1, 0);
-            }
-          );
-        });
+  const pushTaskLists = (data) =>
+    setTaskLists(
+      (taskLists) => ({ ...spliceObject(taskLists, 0, daysToAdd), ...data }),
+      () => {
+        const visibleSlidesCount =
+          breakpoints[swiper.current.currentBreakpoint]?.slidesPerView || 1;
+        swiper.current.slideTo(daysToAdd - visibleSlidesCount + 1, 0);
+      }
+    );
 
-        return { start, end };
-      });
-    }
-  };
+  const handleBeginningReached = () =>
+    swiper.current?.isBeginning &&
+    setDates((dates) => {
+      const start = addDays(dates.start, -daysToAdd);
+      const end = addDays(dates.start, -1);
 
-  const handleBeginningReached = async () => {
-    if (swiper.current?.isBeginning) {
-      setDates((dates) => {
-        const start = addDays(dates.start, -daysToAdd);
-        const end = addDays(dates.start, -1);
+      task.current(start, end).then(appendTaskLists);
+      return { start, end };
+    });
 
-        task.current(start, end).then((data) => {
-          setTaskLists(
-            (taskLists) => {
-              const newTaskLists = sliceObjects(
-                taskLists,
-                swiper.current.slides.length - daysToAdd
-              );
-              return { ...data, ...newTaskLists };
-            },
-            () => swiper.current.slideTo(daysToAdd, 0)
-          );
-        });
-
-        return { start, end };
-      });
-    }
-  };
+  const appendTaskLists = (data) =>
+    setTaskLists(
+      (taskLists) => ({
+        ...data,
+        ...spliceObject(taskLists, swiper.current.slides.length - daysToAdd),
+      }),
+      () => swiper.current.slideTo(daysToAdd, 0)
+    );
 
   return (
     <>
@@ -160,9 +150,11 @@ const Days = () => {
           <Swiper controller={{ control: swiper.current }}></Swiper>
           <Swiper
             breakpoints={breakpoints}
-            initialSlide={daysToAdd + 1}
             allowTouchMove={false}
-            onSwiper={(swiperCore) => (swiper.current = swiperCore)}
+            onSwiper={(swiperCore) => {
+              swiper.current = swiperCore;
+              swiperCore.slideTo(daysToAdd + 1, 0);
+            }}
             onSlidePrevTransitionEnd={handleBeginningReached}
             onSlideNextTransitionEnd={handleEndReached}
           >

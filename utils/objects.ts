@@ -1,6 +1,6 @@
 import { cloneDeep } from "lodash";
 
-export const sliceObjects = (object, start?: number, end?: number) => {
+export const spliceObject = (object, start?: number, end?: number) => {
     const clone = cloneDeep(object);
     Object.keys(clone)
       .slice(start, end)
