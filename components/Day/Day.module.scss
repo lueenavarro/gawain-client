@@ -1,8 +1,10 @@
 @use "styles/colors";
 
 .day {
-  border-width: 0 0.5px 0 0.5px;
-  border-color: colors.$border;
+  border-right: 1px solid rgba(colors.$border, 0.5);
+  border-left: 1px solid rgba(colors.$border, 0.5);
+  border-top: 1px solid colors.$border;
+  border-bottom: 1px solid colors.$border;
   border-style: solid;
   max-width: 500px;
   height: 100%;
