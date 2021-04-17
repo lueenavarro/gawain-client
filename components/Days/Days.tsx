@@ -34,7 +34,8 @@ const Days = () => {
   const swiper = useRef<SwiperCore>(null);
 
   useEffect(() => {
-    task.current(dates.start, dates.end).then((data) => setTaskLists(data));
+    task.current(dates.start, dates.end).then((data) =>
+      setTaskLists(data, () => swiper.current.slideTo(daysToAdd + 1, 0)));
   }, []);
 
   const handleAddTask = async (
@@ -137,47 +138,35 @@ const Days = () => {
     );
 
   return (
-    <>
+    <React.Fragment>
       {!taskLists && <Loading />}
-      {taskLists && (
-        <section className={styles.days}>
-          <div
-            className={styles.prev}
-            onClick={() => swiper.current.slidePrev()}
-          >
-            <div className={styles.arrow}></div>
-          </div>
-          <Swiper controller={{ control: swiper.current }}></Swiper>
-          <Swiper
-            breakpoints={breakpoints}
-            allowTouchMove={false}
-            onSwiper={(swiperCore) => {
-              swiper.current = swiperCore;
-              swiperCore.slideTo(daysToAdd + 1, 0);
-            }}
-            onSlidePrevTransitionEnd={handleBeginningReached}
-            onSlideNextTransitionEnd={handleEndReached}
-          >
-            {Object.values(taskLists).map((taskList: ITaskList) => (
-              <SwiperSlide key={taskList.date}>
-                <Day
-                  onAddTask={handleAddTask}
-                  onRemove={handleRemoveTask}
-                  onComplete={handleCompleteTask}
-                  taskList={taskList}
-                />
-              </SwiperSlide>
-            ))}
-          </Swiper>
-          <div
-            className={styles.next}
-            onClick={() => swiper.current.slideNext()}
-          >
-            <div className={styles.arrow}></div>
-          </div>
-        </section>
-      )}
-    </>
+      <section className={styles.days}>
+        {taskLists && <div className={styles.prev} onClick={() => swiper.current.slidePrev()}>
+          <div className={styles.arrow}></div>
+        </div>}
+        <Swiper controller={{ control: swiper.current }}></Swiper>
+        <Swiper
+          breakpoints={breakpoints}
+          allowTouchMove={false}
+          onSwiper={(swiperCore) => swiper.current = swiperCore}
+          onSlidePrevTransitionEnd={handleBeginningReached}
+          onSlideNextTransitionEnd={handleEndReached}>
+          {taskLists && Object.values(taskLists).map((taskList: ITaskList) => (
+            <SwiperSlide key={taskList.date}>
+              <Day
+                onAddTask={handleAddTask}
+                onRemove={handleRemoveTask}
+                onComplete={handleCompleteTask}
+                taskList={taskList}
+              />
+            </SwiperSlide>
+          ))}
+        </Swiper>
+        {taskLists && <div className={styles.next} onClick={() => swiper.current.slideNext()}>
+          <div className={styles.arrow}></div>
+        </div>}
+      </section>
+    </React.Fragment>
   );
 };
 
