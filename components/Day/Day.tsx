@@ -17,7 +17,7 @@ const Day = ({ taskList, onAddTask, onRemove, onComplete }) => (
       <div className={styles["day__bg"]}>
           {taskList.tasks.map((task, index) => (
               <Task
-                key={index}
+                key={task._id}
                 task={task}
                 onRemove={(...args) => onRemove(...args, taskList.date)}
                 onComplete={(...args) => onComplete(...args, taskList.date)}
