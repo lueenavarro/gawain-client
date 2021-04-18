@@ -3,9 +3,9 @@
 
 .days {
   @include mixins.container;
-  display: flex;
   min-height: 50vh;
   margin-top: 20px;
+  display: flex;
 }
 
 .arrow {
@@ -13,7 +13,6 @@
   align-items: center;
   height: 100%;
   cursor: pointer;
-  width: 1.5rem;
 
   &::after {
     content: "";
@@ -38,8 +37,6 @@
 .prev {
   .arrow::after {
     transform: rotate(-135deg);
-    position: relative;
-    left: 6px;
   }
 }
 
