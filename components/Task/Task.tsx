@@ -1,10 +1,24 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { CSS } from "@dnd-kit/utilities";
+import { useSortable } from "@dnd-kit/sortable";
 
 import styles from "./Task.module.scss";
 
 const Task = (props) => {
   const { task, onRemove, onComplete } = props;
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({ id: task._id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+  };
 
   const taskClass = () =>
     `${styles["task__text"]} ${
@@ -13,9 +27,12 @@ const Task = (props) => {
 
   return (
     <div
-      onClick={() => onComplete(task._id, !task.completed)}
       data-testid="taskBg"
       className={styles.task}
+      ref={setNodeRef}
+      style={style} 
+      {...attributes}
+      {...listeners}
     >
       <div className={styles["task__wrapper"]}>
         <span className={taskClass()} data-testid="task">
