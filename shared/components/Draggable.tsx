@@ -11,7 +11,7 @@ const IDraggable = ({ draggableId, index, children }) => {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
-          {React.cloneElement(children, { snapshot })}
+          {children}
         </div>
       )}
     </Draggable>
