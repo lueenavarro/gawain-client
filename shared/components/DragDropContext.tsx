@@ -1,9 +1,27 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { DragDropContext } from "react-beautiful-dnd";
+import { DragEndResult } from "types";
 
-const IDragDropContext = ({ onDragStart, onDragEnd, children }) => {
-  return <DragDropContext onDragEnd={onDragEnd}> {children}</DragDropContext>;
+interface IDragDropContextProps {
+  onDragStart?: () => any;
+  onDragEnd: (result: DragEndResult) => any;
+  children: React.ReactNode;
+}
+
+const IDragDropContext = ({
+  onDragStart,
+  onDragEnd,
+  children,
+}: IDragDropContextProps) => {
+  return (
+    <DragDropContext
+      onDragStart={onDragStart}
+      onDragEnd={(result) => onDragEnd(result as DragEndResult)}
+    >
+      {children}
+    </DragDropContext>
+  );
 };
 
 IDragDropContext.propTypes = {

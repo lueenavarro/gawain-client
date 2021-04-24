@@ -1,8 +1,13 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Draggable } from "react-beautiful-dnd";
 
-const IDraggable = ({ draggableId, index, children }) => {
+interface IDraggableProps {
+  draggableId: string;
+  index: number;
+  children: React.ReactNode;
+}
+
+const IDraggable = ({ draggableId, index, children }: IDraggableProps) => {
   return (
     <Draggable draggableId={draggableId} index={index}>
       {(provided, snapshot) => (
@@ -16,11 +21,6 @@ const IDraggable = ({ draggableId, index, children }) => {
       )}
     </Draggable>
   );
-};
-
-IDraggable.propTypes = {
-  draggableId: PropTypes.string.isRequired,
-  index: PropTypes.number.isRequired,
 };
 
 export default IDraggable;
