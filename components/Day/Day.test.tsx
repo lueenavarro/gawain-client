@@ -34,10 +34,12 @@ const fakeTasks = [
   {
     _id: "1",
     task: "Go To Market",
+    completed: false,
   },
   {
     _id: "2",
     task: "Go To Gym",
+    completed: false,
   },
 ];
 

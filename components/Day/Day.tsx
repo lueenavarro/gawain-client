@@ -5,11 +5,18 @@ import { Task, TaskClone } from "components/Task";
 import IDraggable from "shared/components/Draggable";
 import IDroppable from "shared/components/Droppable";
 import { formatDate } from "utils/dateTime";
-import { ITask } from "types";
+import { ITaskList } from "types";
 
 import styles from "./Day.module.scss";
 
-const Day = ({ taskList, onAddTask, onRemove, onComplete }) => (
+interface DayProps {
+  taskList: ITaskList;
+  onAddTask: Function;
+  onRemove: Function;
+  onComplete: Function;
+}
+
+const Day = ({ taskList, onAddTask, onRemove, onComplete }: DayProps) => (
   <div className={styles.day}>
     <h3 className={styles["day__name"]} data-testid="day">
       {taskList.day}
@@ -23,7 +30,7 @@ const Day = ({ taskList, onAddTask, onRemove, onComplete }) => (
         list={taskList.tasks}
         cloneParent={TaskClone}
       >
-        {taskList.tasks.map((task: ITask, index: number) => (
+        {taskList.tasks.map((task, index) => (
           <IDraggable key={task._id} draggableId={task._id} index={index}>
             <Task
               task={task}

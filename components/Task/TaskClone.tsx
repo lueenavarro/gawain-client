@@ -1,9 +1,15 @@
 import React from "react";
 
+import { ParentCloneProps, ITask } from "types";
+
 import styles from "./Task.module.scss";
 import cloneStyles from "./TaskClone.module.scss";
 
-export const TaskClone = ({ item: task }) => {
+interface TaskCloneProps extends ParentCloneProps<ITask> {
+  item: ITask;
+}
+
+export const TaskClone = ({ item: task }: TaskCloneProps) => {
   const taskClass = () =>
     `${styles["task__text"]} ${
       task.completed ? styles["task--completed"] : ""

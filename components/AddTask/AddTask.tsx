@@ -4,7 +4,11 @@ import PropTypes from "prop-types";
 import { CharCodes } from "../../constants";
 import styles from "./AddTask.module.scss";
 
-const AddTask = ({ onAddTask }) => {
+interface AddTaskProps {
+  onAddTask: Function;
+}
+
+const AddTask = ({ onAddTask }: AddTaskProps) => {
   const [value, setValue] = useState("");
 
   const handleChange = (event) => {

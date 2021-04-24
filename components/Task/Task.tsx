@@ -1,11 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 
+import { ITask } from "types";
+
 import styles from "./Task.module.scss";
 
-export const Task = (props) => {
-  const { task, onRemove, onComplete } = props;
+interface TaskProps {
+  task: ITask;
+  onRemove: Function;
+  onComplete: Function;
+}
 
+export const Task = ({ task, onRemove, onComplete }: TaskProps) => {
   const taskClass = () =>
     `${styles["task__text"]} ${
       task.completed ? styles["task--completed"] : ""

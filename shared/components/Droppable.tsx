@@ -1,12 +1,19 @@
 import React from "react";
 import { Droppable } from "react-beautiful-dnd";
 
+interface DroppablePropType {
+  droppableId: string;
+  list: Array<any>
+  cloneParent: React.ElementType,
+  children: React.ReactNode
+}
+
 const IDroppable = ({
   droppableId,
   list,
   cloneParent: CloneParent = undefined,
   children,
-}) => {
+}: DroppablePropType) => {
   let renderCloneProps = {};
   if (CloneParent) {
     renderCloneProps = {
@@ -21,7 +28,7 @@ const IDroppable = ({
       ),
     };
   }
-  
+
   return (
     <Droppable droppableId={droppableId} {...renderCloneProps}>
       {(provided) => (
