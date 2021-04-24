@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import { ITask } from "types";
 
@@ -40,11 +39,4 @@ export const Task = ({ task, onRemove, onComplete }: TaskProps) => {
       </div>
     </div>
   );
-};
-
-Task.propTypes = {
-  task: PropTypes.any.isRequired,
-  onRemove: PropTypes.func.isRequired,
-  onComplete: PropTypes.func.isRequired,
-  snapshot: PropTypes.any,
 };
