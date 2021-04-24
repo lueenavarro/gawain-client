@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import renderer from "react-test-renderer";
 
 import { cleanup, render } from "test/react";
-import Task from "./Task";
+import { Task } from "./Task";
 
 const mockOnRemove = jest.fn((_id: string) => {});
 const mockOnComplete = jest.fn(() => {});
