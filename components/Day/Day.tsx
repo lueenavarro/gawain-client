@@ -1,11 +1,11 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 import AddTask from "components/AddTask";
 import { Task, TaskClone } from "components/Task";
 import IDraggable from "shared/components/Draggable";
 import IDroppable from "shared/components/Droppable";
 import { formatDate } from "utils/dateTime";
+import { ITask } from "types";
 
 import styles from "./Day.module.scss";
 
@@ -23,7 +23,7 @@ const Day = ({ taskList, onAddTask, onRemove, onComplete }) => (
         list={taskList.tasks}
         cloneParent={TaskClone}
       >
-        {taskList.tasks.map((task, index) => (
+        {taskList.tasks.map((task: ITask, index: number) => (
           <IDraggable key={task._id} draggableId={task._id} index={index}>
             <Task
               task={task}
@@ -37,11 +37,5 @@ const Day = ({ taskList, onAddTask, onRemove, onComplete }) => (
     </div>
   </div>
 );
-
-Day.propTypes = {
-  taskList: PropTypes.any.isRequired,
-  onAddTask: PropTypes.func.isRequired,
-  onRemove: PropTypes.func.isRequired,
-};
 
 export default Day;
