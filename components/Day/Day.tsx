@@ -27,8 +27,10 @@ const Day = ({ taskList, onAddTask, onRemove, onComplete }: DayProps) => (
     <div className={styles["day__bg"]}>
       <IDroppable
         droppableId={taskList.date}
-        list={taskList.tasks}
-        cloneParent={TaskClone}
+        clone={{
+          list: taskList.tasks,
+          parent: TaskClone
+        }}
       >
         {taskList.tasks.map((task, index) => (
           <IDraggable key={task._id} draggableId={task._id} index={index}>

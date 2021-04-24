@@ -3,19 +3,20 @@ import { Droppable } from "react-beautiful-dnd";
 
 interface DroppablePropType {
   droppableId: string;
-  list: Array<any>
-  cloneParent: React.ElementType,
-  children: React.ReactNode
+  clone?: {
+    list: Array<any>;
+    parent: React.ElementType;
+  };
+  children: React.ReactNode;
 }
 
 const IDroppable = ({
   droppableId,
-  list,
-  cloneParent: CloneParent = undefined,
+  clone: Clone,
   children,
 }: DroppablePropType) => {
   let renderCloneProps = {};
-  if (CloneParent) {
+  if (Clone) {
     renderCloneProps = {
       renderClone: (provided, _, rubric) => (
         <div
@@ -23,7 +24,7 @@ const IDroppable = ({
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
-          <CloneParent item={list[rubric.source.index]}></CloneParent>
+          <Clone.parent item={Clone.list[rubric.source.index]}></Clone.parent>
         </div>
       ),
     };
