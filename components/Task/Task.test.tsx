@@ -11,7 +11,7 @@ const mockOnComplete = jest.fn(() => {});
 let fakeTask;
 let fakeSnapshot;
 beforeEach(()=> {
-  fakeTask = { _id: "1234", task: "Go To Market", completed: false };
+  fakeTask = { _id: "1234", task: "Go To Market", completed: true };
   fakeSnapshot =  { isDragging: false };
   mockOnRemove.mockClear();
   mockOnComplete.mockClear()
@@ -41,19 +41,6 @@ test("render task correctly", () => {
     />
   );
   expect(getByTestId("task")).toHaveTextContent("Go To Market");
-});
-
-test("set active class", () => {
-  fakeSnapshot.isDragging = true;
-  const { getByTestId } = render(
-    <Task
-      task={fakeTask}
-      onRemove={mockOnRemove}
-      snapshot={fakeSnapshot}
-      onComplete={mockOnComplete}
-    />
-  );
-  expect(getByTestId("taskBg").className).toBe("task task--active");
 });
 
 test("call onRemove when x is clicked", () => {
