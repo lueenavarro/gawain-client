@@ -5,6 +5,7 @@ import SwiperCore, { Navigation, Controller } from "swiper";
 
 import Day from "components/Day";
 import Loading from "shared/components/Loading";
+import IDragDropContext from "shared/components/DragDropContext";
 import task from "services/taskService";
 import { DragEndResult, ITaskList, KeyString } from "types";
 import { addDays } from "utils/dateTime";
@@ -12,7 +13,6 @@ import { spliceObject } from "utils/objects";
 import { useCustomState } from "hooks/useCustomState";
 
 import styles from "./Days.module.scss";
-import IDragDropContext from "shared/components/DragDropContext";
 
 SwiperCore.use([Controller, Navigation]);
 
@@ -44,7 +44,7 @@ const Days = () => {
 
   const handleAddTask = async (
     newTask: string,
-    next: Function,
+    next: () => void,
     date: string
   ) => {
     const oldTasks = cloneDeep(taskLists);
@@ -53,9 +53,7 @@ const Days = () => {
       newTask,
       date
     );
-    setTaskLists(newTaskLists, () => {
-      next();
-    });
+    setTaskLists(newTaskLists, next);
 
     try {
       await task.add(newTaskObj, date);
