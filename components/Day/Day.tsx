@@ -29,7 +29,7 @@ const Day = ({ taskList, onAddTask, onRemove, onComplete }: DayProps) => (
         droppableId={taskList.date}
         clone={{
           list: taskList.tasks,
-          parent: TaskClone
+          parent: TaskClone,
         }}
       >
         {taskList.tasks.map((task, index) => (

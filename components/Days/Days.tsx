@@ -103,16 +103,17 @@ const Days = () => {
     }
   };
 
-  const handleEndReached = () =>
-    swiper.current?.isEnd &&
-    setDates((dates) => {
-      const start = addDays(dates.end, 1);
-      const end = addDays(dates.end, daysToAdd);
-      task.current(start, end).then(pushTaskLists);
-      return { start, end };
-    });
+  const handleEndReached = () => {
+    if (swiper.current?.isEnd)
+      setDates((dates) => {
+        const start = addDays(dates.end, 1);
+        const end = addDays(dates.end, daysToAdd);
+        task.current(start, end).then(pushTaskLists);
+        return { start, end };
+      });
+  };
 
-  const pushTaskLists = (data) =>
+  const pushTaskLists = (data: KeyString<ITaskList>) =>
     setTaskLists(
       (taskLists) => ({ ...spliceObject(taskLists, 0, daysToAdd), ...data }),
       () => {
@@ -122,17 +123,18 @@ const Days = () => {
       }
     );
 
-  const handleBeginningReached = () =>
-    swiper.current?.isBeginning &&
-    setDates((dates) => {
-      const start = addDays(dates.start, -daysToAdd);
-      const end = addDays(dates.start, -1);
+  const handleBeginningReached = () => {
+    if (swiper.current?.isBeginning)
+      setDates((dates) => {
+        const start = addDays(dates.start, -daysToAdd);
+        const end = addDays(dates.start, -1);
 
-      task.current(start, end).then(prependTaskLists);
-      return { start, end };
-    });
+        task.current(start, end).then(prependTaskLists);
+        return { start, end };
+      });
+  };
 
-  const prependTaskLists = (data) =>
+  const prependTaskLists = (data: KeyString<ITaskList>) =>
     setTaskLists(
       (taskLists) => ({
         ...data,
