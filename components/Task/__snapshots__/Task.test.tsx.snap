@@ -2,7 +2,7 @@
 
 exports[`snapshot matches 1`] = `
 <div
-  className="task "
+  className="task"
   data-testid="taskBg"
   onClick={[Function]}
 >
@@ -10,7 +10,7 @@ exports[`snapshot matches 1`] = `
     className="task__wrapper"
   >
     <span
-      className="task__text "
+      className="task__text task--completed"
       data-testid="task"
     >
       Go To Market

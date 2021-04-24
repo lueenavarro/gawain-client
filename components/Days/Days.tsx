@@ -5,6 +5,7 @@ import SwiperCore, { Navigation, Controller } from "swiper";
 
 import Day from "components/Day";
 import Loading from "shared/components/Loading";
+import IDragDropContext from "shared/components/DragDropContext";
 import task from "services/taskService";
 import { DragEndResult, ITaskList, KeyString } from "types";
 import { addDays } from "utils/dateTime";
@@ -34,13 +35,16 @@ const Days = () => {
   const swiper = useRef<SwiperCore>(null);
 
   useEffect(() => {
-    task.current(dates.start, dates.end).then((data) =>
-      setTaskLists(data, () => swiper.current.slideTo(daysToAdd + 1, 0)));
+    task
+      .current(dates.start, dates.end)
+      .then((data) =>
+        setTaskLists(data, () => swiper.current.slideTo(daysToAdd + 1, 0))
+      );
   }, []);
 
   const handleAddTask = async (
     newTask: string,
-    next: Function,
+    next: () => void,
     date: string
   ) => {
     const oldTasks = cloneDeep(taskLists);
@@ -49,9 +53,7 @@ const Days = () => {
       newTask,
       date
     );
-    setTaskLists(newTaskLists, () => {
-      next();
-    });
+    setTaskLists(newTaskLists, next);
 
     try {
       await task.add(newTaskObj, date);
@@ -99,16 +101,17 @@ const Days = () => {
     }
   };
 
-  const handleEndReached = () =>
-    swiper.current?.isEnd &&
-    setDates((dates) => {
-      const start = addDays(dates.end, 1);
-      const end = addDays(dates.end, daysToAdd);
-      task.current(start, end).then(pushTaskLists);
-      return { start, end };
-    });
+  const handleEndReached = () => {
+    if (swiper.current?.isEnd)
+      setDates((dates) => {
+        const start = addDays(dates.end, 1);
+        const end = addDays(dates.end, daysToAdd);
+        task.current(start, end).then(pushTaskLists);
+        return { start, end };
+      });
+  };
 
-  const pushTaskLists = (data) =>
+  const pushTaskLists = (data: KeyString<ITaskList>) =>
     setTaskLists(
       (taskLists) => ({ ...spliceObject(taskLists, 0, daysToAdd), ...data }),
       () => {
@@ -118,17 +121,18 @@ const Days = () => {
       }
     );
 
-  const handleBeginningReached = () =>
-    swiper.current?.isBeginning &&
-    setDates((dates) => {
-      const start = addDays(dates.start, -daysToAdd);
-      const end = addDays(dates.start, -1);
+  const handleBeginningReached = () => {
+    if (swiper.current?.isBeginning)
+      setDates((dates) => {
+        const start = addDays(dates.start, -daysToAdd);
+        const end = addDays(dates.start, -1);
 
-      task.current(start, end).then(appendTaskLists);
-      return { start, end };
-    });
+        task.current(start, end).then(prependTaskLists);
+        return { start, end };
+      });
+  };
 
-  const appendTaskLists = (data) =>
+  const prependTaskLists = (data: KeyString<ITaskList>) =>
     setTaskLists(
       (taskLists) => ({
         ...data,
@@ -141,30 +145,44 @@ const Days = () => {
     <React.Fragment>
       {!taskLists && <Loading />}
       <section className={styles.days}>
-        {taskLists && <div className={styles.prev} onClick={() => swiper.current.slidePrev()}>
-          <div className={styles.arrow}></div>
-        </div>}
-        <Swiper controller={{ control: swiper.current }}></Swiper>
-        <Swiper
-          breakpoints={breakpoints}
-          allowTouchMove={false}
-          onSwiper={(swiperCore) => swiper.current = swiperCore}
-          onSlidePrevTransitionEnd={handleBeginningReached}
-          onSlideNextTransitionEnd={handleEndReached}>
-          {taskLists && Object.values(taskLists).map((taskList: ITaskList) => (
-            <SwiperSlide key={taskList.date}>
-              <Day
-                onAddTask={handleAddTask}
-                onRemove={handleRemoveTask}
-                onComplete={handleCompleteTask}
-                taskList={taskList}
-              />
-            </SwiperSlide>
-          ))}
-        </Swiper>
-        {taskLists && <div className={styles.next} onClick={() => swiper.current.slideNext()}>
-          <div className={styles.arrow}></div>
-        </div>}
+        {taskLists && (
+          <div
+            className={styles.prev}
+            onClick={() => swiper.current.slidePrev()}
+          >
+            <div className={styles.arrow}></div>
+          </div>
+        )}
+        <IDragDropContext onDragEnd={(result) => handleMoveTask(result)}>
+          <Swiper controller={{ control: swiper.current }}></Swiper>
+          <Swiper
+            breakpoints={breakpoints}
+            allowTouchMove={false}
+            onSwiper={(swiperCore) => (swiper.current = swiperCore)}
+            onSlidePrevTransitionEnd={handleBeginningReached}
+            onSlideNextTransitionEnd={handleEndReached}
+          >
+            {taskLists &&
+              Object.values(taskLists).map((taskList: ITaskList) => (
+                <SwiperSlide key={taskList.date}>
+                  <Day
+                    onAddTask={handleAddTask}
+                    onRemove={handleRemoveTask}
+                    onComplete={handleCompleteTask}
+                    taskList={taskList}
+                  />
+                </SwiperSlide>
+              ))}
+          </Swiper>
+        </IDragDropContext>
+        {taskLists && (
+          <div
+            className={styles.next}
+            onClick={() => swiper.current.slideNext()}
+          >
+            <div className={styles.arrow}></div>
+          </div>
+        )}
       </section>
     </React.Fragment>
   );

@@ -18,7 +18,7 @@ jest.mock("shared/components/Draggable", () => ({
 
 jest.mock("components/Task", () => ({
   __esModule: true,
-  default: ({ task }) => <span data-testid="task">{task.task}</span>,
+  Task: ({ task }) => <span data-testid="task">{task.task}</span>,
 }));
 
 jest.mock("components/AddTask", () => ({
@@ -34,14 +34,20 @@ const fakeTasks = [
   {
     _id: "1",
     task: "Go To Market",
-    onRemove: jest.fn(() => {}),
+    completed: false,
   },
   {
     _id: "2",
     task: "Go To Gym",
-    onRemove: jest.fn(() => {}),
+    completed: false,
   },
 ];
+
+const fakeTaskList = {
+  day: "Monday",
+  date: "2020-02-28",
+  tasks: fakeTasks,
+};
 
 const mockOnAddTask = jest.fn(() => {});
 const mockOnRemove = jest.fn(() => {});
@@ -51,9 +57,7 @@ test("render without crashing", () => {
   const div = document.createElement("div");
   ReactDOM.render(
     <Day
-      day="Monday"
-      date="2020-02-28"
-      tasks={[]}
+      taskList={fakeTaskList}
       onAddTask={mockOnAddTask}
       onRemove={mockOnRemove}
       onComplete={mockOnComplete}
@@ -67,9 +71,7 @@ test("render day, date and tasks correctly", () => {
 
   const { getByTestId, getAllByTestId } = render(
     <Day
-      day="Monday"
-      date="2020-02-28"
-      tasks={fakeTasks}
+      taskList={fakeTaskList}
       onAddTask={mockOnAddTask}
       onRemove={mockOnRemove}
       onComplete={mockOnComplete}
@@ -79,17 +81,15 @@ test("render day, date and tasks correctly", () => {
   expect(getByTestId("day").innerHTML).toBe("Monday");
   expect(getByTestId("date").innerHTML).toBe("February 28");
   expect(getAllByTestId("task").length).toBe(2);
-  expect(getAllByTestId("task")[0].innerHTML).toBe("Go To Market");
-  expect(getAllByTestId("task")[1].innerHTML).toBe("Go To Gym");
+  expect(getAllByTestId("task")[0].innerHTML).toBe(fakeTasks[0].task);
+  expect(getAllByTestId("task")[1].innerHTML).toBe(fakeTasks[1].task);
 });
 
 test("snapshot matches", () => {
   const tree = renderer
     .create(
       <Day
-        day="Monday"
-        date="2020-02-28"
-        tasks={fakeTasks}
+        taskList={fakeTaskList}
         onAddTask={mockOnAddTask}
         onRemove={mockOnRemove}
         onComplete={mockOnComplete}
