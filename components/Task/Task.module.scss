@@ -12,7 +12,7 @@
 
   &__wrapper {
     position: relative;
-    min-height: 28.5px;
+    min-height: 30px;
     padding: 0 20px;
     box-sizing: border-box;
     overflow: hidden;
@@ -26,6 +26,21 @@
     min-width: 0;
     margin-right: 10px;
     padding: 5px 0;
+  }
+
+  &__delete {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    user-select: none;
+    margin-left: auto;
+    cursor: pointer;
+    width: 25px;
+
+    &:hover {
+      color: colors.$red;
+    }
   }
 
   &:hover {
@@ -44,21 +59,6 @@
 
     .task__delete {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      user-select: none;
-    }
-  }
-
-  &__delete {
-    display: none;
-    margin-left: auto;
-    cursor: pointer;
-    width: 25px;
-
-    &:hover {
-      color: colors.$red;
     }
   }
 }

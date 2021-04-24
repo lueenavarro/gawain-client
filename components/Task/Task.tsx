@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import styles from "./Task.module.scss";
 
-const Task = (props) => {
+export const Task = (props) => {
   const { task, onRemove, onComplete } = props;
 
   const taskClass = () =>
@@ -42,5 +42,3 @@ Task.propTypes = {
   onComplete: PropTypes.func.isRequired,
   snapshot: PropTypes.any,
 };
-
-export default Task;

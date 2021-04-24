@@ -1,10 +1,27 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { Droppable } from "react-beautiful-dnd";
 
-const IDroppable = ({ droppableId, children }) => {
+const IDroppable = ({
+  droppableId,
+  list,
+  cloneParent: CloneParent,
+  children,
+}) => {
   return (
-    <Droppable droppableId={droppableId}>
+    <Droppable
+      droppableId={droppableId}
+      renderClone={(provided, _, rubric) => {
+        return (
+          <div
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            ref={provided.innerRef}
+          >
+            <CloneParent item={list[rubric.source.index]}></CloneParent>
+          </div>
+        );
+      }}
+    >
       {(provided) => (
         <div
           ref={provided.innerRef}
@@ -17,10 +34,6 @@ const IDroppable = ({ droppableId, children }) => {
       )}
     </Droppable>
   );
-};
-
-IDroppable.propTypes = {
-  droppableId: PropTypes.string.isRequired,
 };
 
 export default IDroppable;

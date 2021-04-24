@@ -128,11 +128,11 @@ const Days = () => {
       const start = addDays(dates.start, -daysToAdd);
       const end = addDays(dates.start, -1);
 
-      task.current(start, end).then(appendTaskLists);
+      task.current(start, end).then(prependTaskLists);
       return { start, end };
     });
 
-  const appendTaskLists = (data) =>
+  const prependTaskLists = (data) =>
     setTaskLists(
       (taskLists) => ({
         ...data,

@@ -1,1 +1,2 @@
-export { default } from "./Task";
+export * from "./Task";
+export * from "./TaskClone";
