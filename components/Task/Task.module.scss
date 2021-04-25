@@ -4,6 +4,7 @@
   height: 30px;
   position: relative;
   box-sizing: border-box;
+  user-select: none;
 
   &--completed {
     color: colors.$gray;
@@ -30,6 +31,7 @@
 
   &:hover {
     z-index: 10;
+    cursor: grab;
 
     .task__wrapper {
       background-color: colors.$lightgray;

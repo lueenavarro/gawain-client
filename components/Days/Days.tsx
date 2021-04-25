@@ -3,8 +3,9 @@ import { cloneDeep } from "lodash";
 import {
   closestCenter,
   DndContext,
-  KeyboardSensor,
+  MouseSensor,
   PointerSensor,
+  TouchSensor,
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
@@ -20,7 +21,6 @@ import { spliceObject } from "utils/objects";
 import { useCustomState } from "hooks/useCustomState";
 
 import styles from "./Days.module.scss";
-import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 
 SwiperCore.use([Controller, Navigation]);
 
@@ -43,7 +43,9 @@ const Days = () => {
   const swiper = useRef<SwiperCore>(null);
 
   const sensors = useSensors(
-    useSensor(PointerSensor)
+    useSensor(PointerSensor),
+    useSensor(MouseSensor),
+    useSensor(TouchSensor)
   );
 
   useEffect(() => {
@@ -158,46 +160,46 @@ const Days = () => {
       {!taskLists && <Loading />}
       <section className={styles.days}>
         {taskLists && (
-          <div
-            className={styles.prev}
-            onClick={() => swiper.current.slidePrev()}
-          >
-            <div className={styles.arrow}></div>
-          </div>
-        )}
-        <DndContext
-          sensors={sensors}
-          collisionDetection={closestCenter}
-          onDragEnd={(result) => console.log(result)}
-        >
-          <Swiper controller={{ control: swiper.current }}></Swiper>
-          <Swiper
-            breakpoints={breakpoints}
-            allowTouchMove={false}
-            onSwiper={(swiperCore) => (swiper.current = swiperCore)}
-            onSlidePrevTransitionEnd={handleBeginningReached}
-            onSlideNextTransitionEnd={handleEndReached}
-          >
-            {taskLists &&
-              Object.values(taskLists).map((taskList: ITaskList) => (
-                <SwiperSlide key={taskList.date}>
-                  <Day
-                    onAddTask={handleAddTask}
-                    onRemove={handleRemoveTask}
-                    onComplete={handleCompleteTask}
-                    taskList={taskList}
-                  />
-                </SwiperSlide>
-              ))}
-          </Swiper>
-        </DndContext>
-        {taskLists && (
-          <div
-            className={styles.next}
-            onClick={() => swiper.current.slideNext()}
-          >
-            <div className={styles.arrow}></div>
-          </div>
+          <>
+            <div
+              className={styles.prev}
+              onClick={() => swiper.current.slidePrev()}
+            >
+              <div className={styles.arrow}></div>
+            </div>
+
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={(result) => console.log(result)}
+            >
+              <Swiper controller={{ control: swiper.current }}></Swiper>
+              <Swiper
+                breakpoints={breakpoints}
+                allowTouchMove={false}
+                onSwiper={(swiperCore) => (swiper.current = swiperCore)}
+                onSlidePrevTransitionEnd={handleBeginningReached}
+                onSlideNextTransitionEnd={handleEndReached}
+              >
+                {Object.values(taskLists).map((taskList: ITaskList) => (
+                  <SwiperSlide key={taskList.date}>
+                    <Day
+                      onAddTask={handleAddTask}
+                      onRemove={handleRemoveTask}
+                      onComplete={handleCompleteTask}
+                      taskList={taskList}
+                    />
+                  </SwiperSlide>
+                ))}
+              </Swiper>
+            </DndContext>
+            <div
+              className={styles.next}
+              onClick={() => swiper.current.slideNext()}
+            >
+              <div className={styles.arrow}></div>
+            </div>
+          </>
         )}
       </section>
     </React.Fragment>

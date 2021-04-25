@@ -27,16 +27,16 @@ const Task = (props) => {
 
   return (
     <div
-      data-testid="taskBg"
-      className={styles.task}
+      style={style}
       ref={setNodeRef}
-      style={style} 
       {...attributes}
       {...listeners}
+      data-testid="taskBg"
+      className={styles.task}
     >
       <div className={styles["task__wrapper"]}>
         <span className={taskClass()} data-testid="task">
-          {task.task}
+          {task._id}
         </span>
         <div
           className={styles["task__delete"]}
