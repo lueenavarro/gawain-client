@@ -1,3 +1,5 @@
-.task__wrapper {
-  background-color: pink;
+.task {
+  &__wrapper {
+    background-color: pink;
+  }
 }

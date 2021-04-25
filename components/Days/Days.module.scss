@@ -3,7 +3,8 @@
 
 .days {
   @include mixins.container;
-  min-height: 50vh;
+  height: 50vh;
+  min-height: 400px;
   margin-top: 20px;
   display: flex;
 }

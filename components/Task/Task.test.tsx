@@ -9,10 +9,8 @@ const mockOnRemove = jest.fn((_id: string) => {});
 const mockOnComplete = jest.fn(() => {});
 
 let fakeTask;
-let fakeSnapshot;
 beforeEach(()=> {
   fakeTask = { _id: "1234", task: "Go To Market", completed: true };
-  fakeSnapshot =  { isDragging: false };
   mockOnRemove.mockClear();
   mockOnComplete.mockClear()
 })
@@ -24,7 +22,6 @@ test("render without crashing", () => {
     <Task
       task={fakeTask}
       onRemove={mockOnRemove}
-      snapshot={fakeSnapshot}
       onComplete={mockOnComplete}
     />,
     div
@@ -36,7 +33,6 @@ test("render task correctly", () => {
     <Task
       task={fakeTask}
       onRemove={mockOnRemove}
-      snapshot={fakeSnapshot}
       onComplete={mockOnComplete}
     />
   );
@@ -48,7 +44,6 @@ test("call onRemove when x is clicked", () => {
     <Task
       task={fakeTask}
       onRemove={mockOnRemove}
-      snapshot={fakeSnapshot}
       onComplete={mockOnComplete}
     />
   );
@@ -62,7 +57,6 @@ test("change of style whent task completed", () => {
     <Task
       task={fakeTask}
       onRemove={mockOnRemove}
-      snapshot={fakeSnapshot}
       onComplete={mockOnComplete}
     />
   );
@@ -76,7 +70,6 @@ test("snapshot matches", () => {
       <Task
         task={fakeTask}
         onRemove={mockOnRemove}
-        snapshot={fakeSnapshot}
         onComplete={mockOnComplete}
       />
     )

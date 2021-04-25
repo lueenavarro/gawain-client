@@ -26,16 +26,18 @@ export const Task = ({ task, onRemove, onComplete }: TaskProps) => {
         <span className={taskClass()} data-testid="task">
           {task.task}
         </span>
-        <div
-          className={styles["task__delete"]}
-          onClick={(e) => {
-            e.stopPropagation();
-            onRemove(task._id);
-          }}
-          data-testid="remove"
-        >
-          x
-        </div>
+        {task.completed && (
+          <div
+            className={styles["task__delete"]}
+            onClick={(e) => {
+              e.stopPropagation();
+              onRemove(task._id);
+            }}
+            data-testid="remove"
+          >
+            x
+          </div>
+        )}
       </div>
     </div>
   );
