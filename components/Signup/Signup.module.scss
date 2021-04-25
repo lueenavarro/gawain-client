@@ -1,0 +1,25 @@
+.signup {
+  flex: 1;
+  width: 100%;
+  display: grid;
+  place-items: center;
+
+  &__wrapper {
+    position: relative;
+    top: -40px;
+    width: 90%;
+    max-width: 400px;
+    display: grid;
+    grid-template-rows: auto 30px 30px 30px;
+    row-gap: 10px;
+  }
+
+  &__title {
+    margin-bottom: 5px;
+    text-align: center;
+  }
+
+  &__link {
+    text-decoration: underline;
+}
+}
