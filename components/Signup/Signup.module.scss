@@ -10,8 +10,8 @@
     width: 90%;
     max-width: 400px;
     display: grid;
-    grid-template-rows: auto 30px 30px 30px;
-    row-gap: 10px;
+    grid-template-rows: auto 30px auto 30px auto 30px;
+    row-gap: 5px;
   }
 
   &__title {
@@ -20,6 +20,13 @@
   }
 
   &__link {
+    margin-top: 5px;
     text-decoration: underline;
-}
+  }
+
+  &__errors {
+    color: red;
+    text-align: right;
+    font-size: 12px;
+  }
 }
