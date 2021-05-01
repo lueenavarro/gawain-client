@@ -24,74 +24,70 @@ const Signup = () => {
     password: yup.string().min(8).required("password is required"),
   });
 
-  const handleSignup = async (user) => {
-    const token = await userService.signup(user);
+  const handleSubmit = async (user) => {
+    const userData = await userService.signup(user);
+    console.log(userData);
   };
 
   return (
-    <div className={styles.signup}>
-      <div className={styles["signup__wrapper"]}>
-        <h3 className={styles["signup__title"]}>Signup</h3>
-        <Formik
-          initialValues={{
-            email: "",
-            password: "",
-          }}
-          validationSchema={schema}
-          onSubmit={handleSignup}
-        >
-          {({
-            values,
-            errors,
-            touched,
-            isSubmitting,
-            handleBlur,
-            handleChange,
-            handleSubmit,
-          }) => {
-            return (
-              <>
-                <input
-                  name="email"
-                  type="text"
-                  placeholder="Email"
-                  value={values.email}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                <div className={styles["signup__errors"]}>
-                  {errors.email && touched.email && errors.email}
-                </div>
-                <input
-                  name="password"
-                  type="password"
-                  placeholder="Password"
-                  value={values.password}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                <div className={styles["signup__errors"]}>
-                  {errors.password && touched.password && errors.password}
-                </div>
-                <button
-                  type="submit"
-                  className={styles["signup__button"]}
-                  disabled={isSubmitting}
-                  onClick={() => handleSubmit()}
-                >
-                  Signup
-                </button>
-              </>
-            );
-          }}
-        </Formik>
-        <Link href="/login">
-          <a className={styles["signup__link"]}>
-            {"<"} I have an account already
-          </a>
-        </Link>
-      </div>
-    </div>
+    <Formik
+      initialValues={{
+        email: "",
+        password: "",
+      }}
+      validationSchema={schema}
+      onSubmit={handleSubmit}
+    >
+      {({
+        values,
+        errors,
+        touched,
+        isSubmitting,
+        handleBlur,
+        handleChange,
+        handleSubmit,
+      }) => (
+        <form className={styles.signup}>
+          <div className={styles["signup__wrapper"]}>
+            <h3 className={styles["signup__title"]}>Signup</h3>
+            <input
+              name="email"
+              type="text"
+              placeholder="Email"
+              value={values.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            <div className={styles["signup__errors"]}>
+              {errors.email && touched.email && errors.email}
+            </div>
+            <input
+              name="password"
+              type="password"
+              placeholder="Password"
+              value={values.password}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            <div className={styles["signup__errors"]}>
+              {errors.password && touched.password && errors.password}
+            </div>
+            <button
+              type="submit"
+              className={styles["signup__button"]}
+              disabled={isSubmitting}
+            >
+              Signup
+            </button>
+            <Link href="/login">
+              <a className={styles["signup__link"]}>
+                {"<"} I have an account already
+              </a>
+            </Link>
+          </div>
+        </form>
+      )}
+    </Formik>
   );
 };
 
