@@ -147,37 +147,38 @@ const Days = () => {
       <section className={styles.days}>
         {taskLists && (
           <div
-            className={styles.prev}
+            className={`${styles.prev} ${styles["arrow-bg"]}`}
             onClick={() => swiper.current.slidePrev()}
           >
             <div className={styles.arrow}></div>
           </div>
         )}
-        <IDragDropContext onDragEnd={(result) => handleMoveTask(result)}>
-          <Swiper controller={{ control: swiper.current }}></Swiper>
-          <Swiper
-            breakpoints={breakpoints}
-            allowTouchMove={false}
-            onSwiper={(swiperCore) => (swiper.current = swiperCore)}
-            onSlidePrevTransitionEnd={handleBeginningReached}
-            onSlideNextTransitionEnd={handleEndReached}
-          >
-            {taskLists &&
-              Object.values(taskLists).map((taskList: ITaskList) => (
-                <SwiperSlide key={taskList.date}>
-                  <Day
-                    onAddTask={handleAddTask}
-                    onRemove={handleRemoveTask}
-                    onComplete={handleCompleteTask}
-                    taskList={taskList}
-                  />
-                </SwiperSlide>
-              ))}
-          </Swiper>
-        </IDragDropContext>
+        <div className={styles.slides}>
+          <IDragDropContext onDragEnd={(result) => handleMoveTask(result)}>
+            <Swiper
+              breakpoints={breakpoints}
+              allowTouchMove={false}
+              onSwiper={(swiperCore) => (swiper.current = swiperCore)}
+              onSlidePrevTransitionEnd={handleBeginningReached}
+              onSlideNextTransitionEnd={handleEndReached}
+            >
+              {taskLists &&
+                Object.values(taskLists).map((taskList: ITaskList) => (
+                  <SwiperSlide key={taskList.date}>
+                    <Day
+                      onAddTask={handleAddTask}
+                      onRemove={handleRemoveTask}
+                      onComplete={handleCompleteTask}
+                      taskList={taskList}
+                    />
+                  </SwiperSlide>
+                ))}
+            </Swiper>
+          </IDragDropContext>
+        </div>
         {taskLists && (
           <div
-            className={styles.next}
+            className={`${styles.next} ${styles["arrow-bg"]}`}
             onClick={() => swiper.current.slideNext()}
           >
             <div className={styles.arrow}></div>

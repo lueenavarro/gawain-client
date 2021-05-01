@@ -1,5 +1,9 @@
+@use "styles/colors";
+
 .task {
   &__wrapper {
-    background-color: pink;
+    background-color: colors.$primary;
+    transition: background-color 0.2s;
+    color: white
   }
 }
