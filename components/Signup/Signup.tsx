@@ -47,7 +47,7 @@ const Signup = () => {
         handleChange,
         handleSubmit,
       }) => (
-        <form className={styles.signup}>
+        <form className={styles.signup} onSubmit={handleSubmit}>
           <div className={styles["signup__wrapper"]}>
             <h3 className={styles["signup__title"]}>Signup</h3>
             <input
