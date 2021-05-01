@@ -17,6 +17,7 @@
     box-sizing: border-box;
     overflow: hidden;
     display: flex;
+    transition: background-color 0.2s;
   }
 
   &__text {
