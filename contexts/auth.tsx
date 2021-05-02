@@ -22,6 +22,7 @@ export const AuthProvider = ({ children }) => {
         const user = await tokenService.decodeAccessToken();
         setUser(user);
       } catch (error) {
+        console.error(error);
       } finally {
         setLoading(false);
       }

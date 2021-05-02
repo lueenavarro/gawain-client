@@ -11,6 +11,7 @@ import { DragEndResult, ITaskList, KeyString } from "types";
 import { addDays } from "utils/dateTime";
 import { spliceObject } from "utils/objects";
 import { useCustomState } from "hooks/useCustomState";
+import { useAuthEffect } from "hooks/useAuthEffect";
 
 import styles from "./Days.module.scss";
 
@@ -34,12 +35,13 @@ const Days = () => {
   const [taskLists, setTaskLists] = useCustomState<KeyString<ITaskList>>(null);
   const swiper = useRef<SwiperCore>(null);
 
-  useEffect(() => {
+  useAuthEffect(() => {
     task
       .current(dates.start, dates.end)
       .then((data) =>
         setTaskLists(data, () => swiper.current.slideTo(daysToAdd + 1, 0))
-      ).catch(error=> console.error(error));
+      )
+      .catch((error) => console.error(error));
   }, []);
 
   const handleAddTask = async (
