@@ -2,22 +2,23 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Formik } from "formik";
 
+import { useAuth } from "contexts/auth";
+
 import styles from "./Login.module.scss";
-import userService from "services/userService";
 
 const Login = () => {
+  const { login } = useAuth();
   const [wrongCred, setWrongCred] = useState(false);
 
   const handleSubmit = async (user) => {
+    setWrongCred(false);
     try {
-      setWrongCred(false);
-      const userData = await userService.login(user);
-      console.log(userData);
-    } catch (error) {
+      await login(user);
+    } catch {
       setWrongCred(true);
     }
   };
-  
+
   return (
     <Formik
       initialValues={{
@@ -35,9 +36,9 @@ const Login = () => {
               type="text"
               placeholder="Email"
               value={values.email}
-              onChange={(value) =>{
-                setWrongCred(false); 
-                handleChange(value)
+              onChange={(value) => {
+                setWrongCred(false);
+                handleChange(value);
               }}
               onBlur={handleBlur}
             />
@@ -46,9 +47,9 @@ const Login = () => {
               type="password"
               placeholder="Password"
               value={values.password}
-              onChange={(e) =>{
-                setWrongCred(false); 
-                handleChange(e)
+              onChange={(e) => {
+                setWrongCred(false);
+                handleChange(e);
               }}
               onBlur={handleBlur}
             />
@@ -59,7 +60,7 @@ const Login = () => {
               <a className={styles["login__link"]}>Create an account</a>
             </Link>
             <div className={styles["login__errors"]}>
-              {wrongCred && <div >Wrong email or password</div>}
+              {wrongCred && <div>Wrong email or password</div>}
             </div>
           </div>
         </form>

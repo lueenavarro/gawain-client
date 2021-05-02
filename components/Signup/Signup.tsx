@@ -4,10 +4,12 @@ import { Formik } from "formik";
 import * as yup from "yup";
 
 import userService from "services/userService";
+import { useAuth } from "contexts/auth";
 
 import styles from "./Signup.module.scss";
 
 const Signup = () => {
+  const { signup } = useAuth();
   const schema = yup.object().shape({
     email: yup
       .string()
@@ -24,11 +26,6 @@ const Signup = () => {
     password: yup.string().min(8).required("password is required"),
   });
 
-  const handleSubmit = async (user) => {
-    const userData = await userService.signup(user);
-    console.log(userData);
-  };
-
   return (
     <Formik
       initialValues={{
@@ -36,7 +33,7 @@ const Signup = () => {
         password: "",
       }}
       validationSchema={schema}
-      onSubmit={handleSubmit}
+      onSubmit={signup}
     >
       {({
         values,

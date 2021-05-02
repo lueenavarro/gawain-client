@@ -39,7 +39,7 @@ const Days = () => {
       .current(dates.start, dates.end)
       .then((data) =>
         setTaskLists(data, () => swiper.current.slideTo(daysToAdd + 1, 0))
-      );
+      ).catch(error=> console.error(error));
   }, []);
 
   const handleAddTask = async (
