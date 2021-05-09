@@ -7,6 +7,7 @@ import userService from "services/userService";
 import { useAuth } from "contexts/auth";
 
 import styles from "./Signup.module.scss";
+import Button from "components/Button";
 
 const Signup = () => {
   const { signup } = useAuth();
@@ -69,13 +70,9 @@ const Signup = () => {
             <div className={styles["signup__errors"]}>
               {errors.password && touched.password && errors.password}
             </div>
-            <button
-              type="submit"
-              className={styles["signup__button"]}
-              disabled={isSubmitting}
-            >
+            <Button type="submit" invert={false} disabled={isSubmitting}>
               Signup
-            </button>
+            </Button>
             <Link href="/login">
               <a className={styles["signup__link"]}>
                 {"<"} I have an account already

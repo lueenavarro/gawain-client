@@ -5,6 +5,7 @@ import { Formik } from "formik";
 import { useAuth } from "contexts/auth";
 
 import styles from "./Login.module.scss";
+import Button from "components/Button";
 
 const Login = () => {
   const { login } = useAuth();
@@ -53,9 +54,9 @@ const Login = () => {
               }}
               onBlur={handleBlur}
             />
-            <button type="submit" disabled={isSubmitting}>
+            <Button type="submit" invert={false} disabled={isSubmitting}>
               Login
-            </button>
+            </Button>
             <Link href="/signup">
               <a className={styles["login__link"]}>Create an account</a>
             </Link>

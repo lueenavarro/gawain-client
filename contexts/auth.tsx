@@ -22,6 +22,7 @@ export const AuthProvider = ({ children }) => {
     async function decodeAccessToken() {
       try {
         const user = await tokenService.decodeAccessToken();
+        console.log(user);
         setUser(user);
       } catch (error) {
         console.error(error);
