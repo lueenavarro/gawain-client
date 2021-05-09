@@ -1,0 +1,42 @@
+.login {
+  flex: 1;
+  width: 100%;
+  display: grid;
+  place-items: center;
+
+  &__wrapper {
+    position: relative;
+    top: -40px;
+    width: 90%;
+    max-width: 400px;
+    display: grid;
+    grid-template-rows: auto 30px 30px auto;
+    row-gap: 10px;
+  }
+
+  &__title {
+    margin-bottom: 5px;
+    text-align: center;
+  }
+
+  &__link {
+    text-decoration: underline;
+  }
+
+  &__errors {
+    margin-top: 10px;
+    height: 20px;
+    
+    & > * {
+      height: 100%;
+      border-radius: 3px;
+      font-size: 12px;
+      border-left-color: transparent;
+      border: 1px solid #EF5350;
+      background-color: #FFEBEE;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}

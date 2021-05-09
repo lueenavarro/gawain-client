@@ -1,0 +1,32 @@
+@use "styles/colors";
+
+.button {
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+  width: 100%;
+}
+
+.white {
+  background-color: transparent;
+  border: 2px solid colors.$white;
+  color: colors.$white;
+
+  &:hover {
+    background-color: white;
+    color: colors.$primary;
+    transition: all 0.2s;
+  }
+}
+
+.black {
+  background-color: transparent;
+  color: colors.$primary;
+  border: 2px solid colors.$primary;
+
+  &:hover {
+    background-color: colors.$primary;
+    color: colors.$white;
+    transition: all 0.2s;
+  }
+}

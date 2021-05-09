@@ -1,17 +1,20 @@
 import Layout from "../components/Layout";
-import { resetServerContext } from "react-beautiful-dnd";
+import Header from "../components/Header";
+import { AuthProvider, ProtectRoute } from "../contexts/auth";
 
 import "../styles/globals.scss";
-import 'swiper/swiper.scss';
-
+import "swiper/swiper.scss";
 
 function OneStep({ Component, pageProps }) {
-  resetServerContext();
-
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <AuthProvider>
+      <Layout>
+        <Header />
+        <ProtectRoute>
+          <Component {...pageProps} />
+        </ProtectRoute>
+      </Layout>
+    </AuthProvider>
   );
 }
 

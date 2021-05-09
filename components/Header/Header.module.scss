@@ -23,3 +23,41 @@
     }
   }
 }
+
+.account {
+  display: none;
+}
+
+.sidebar {
+  margin-left: auto;
+  &__hamburger {
+    cursor: pointer;
+    &::after {
+      content: "≡";
+      font-size: 1.875rem;
+    }
+  }
+}
+
+@media (min-width: 768px) {
+  .account {
+    margin-left: auto;
+    display: flex;
+
+    &__email {
+      margin: 0;
+      &::after {
+        content: "|";
+        margin: 0 10px;
+      }
+    }
+
+    &__logout {
+      cursor: pointer;
+    }
+  }
+
+  .sidebar {
+    display: none;
+  }
+}

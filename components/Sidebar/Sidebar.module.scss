@@ -1,0 +1,45 @@
+@use "styles/colors";
+
+.sidebar {
+  display: flex;
+  z-index: 1000;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  flex-direction: column;
+  width: 50vw;
+  min-width: 18.75rem;
+  max-width: 31.25rem;
+  padding: 3.125rem 1.25rem;
+  color: white;
+  text-align: center;
+  background-color: colors.$primary;
+
+  &__email {
+      margin-top: auto;
+      margin-bottom: 50px;
+  }
+
+  &__logout {
+    margin: 0 auto;
+    width: 200px;
+  }
+
+  &__x {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    cursor: pointer;
+  }
+}
+
+.backdrop {
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba($color: #000000, $alpha: 0.8);
+}
