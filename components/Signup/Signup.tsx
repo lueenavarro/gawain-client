@@ -3,11 +3,11 @@ import React from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 
+import Button from "components/shared/Button";
 import userService from "services/userService";
 import { useAuth } from "contexts/auth";
 
 import styles from "./Signup.module.scss";
-import Button from "components/Button";
 
 const Signup = () => {
   const { signup } = useAuth();

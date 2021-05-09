@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Formik } from "formik";
 
+import Button from "components/shared/Button";
 import { useAuth } from "contexts/auth";
 
 import styles from "./Login.module.scss";
-import Button from "components/Button";
 
 const Login = () => {
   const { login } = useAuth();

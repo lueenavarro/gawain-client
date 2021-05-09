@@ -2,8 +2,8 @@ import React from "react";
 
 import AddTask from "components/AddTask";
 import { Task, TaskClone } from "components/Task";
-import IDraggable from "shared/components/Draggable";
-import IDroppable from "shared/components/Droppable";
+import IDraggable from "components/shared/Draggable";
+import IDroppable from "components/shared/Droppable";
 import { formatDate } from "utils/dateTime";
 import { ITaskList } from "types";
 

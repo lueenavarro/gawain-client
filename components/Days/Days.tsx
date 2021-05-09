@@ -4,8 +4,8 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Controller } from "swiper";
 
 import Day from "components/Day";
-import Loading from "shared/components/Loading";
-import IDragDropContext from "shared/components/DragDropContext";
+import IDragDropContext from "components/shared/DragDropContext";
+import Loading from "components/shared/Loading";
 import task from "services/taskService";
 import { DragEndResult, ITaskList, KeyString } from "types";
 import { addDays } from "utils/dateTime";

@@ -2,7 +2,7 @@ import React, { Fragment } from "react";
 import { CSSTransition } from "react-transition-group";
 
 import { useAuth } from "contexts/auth";
-import Button from "components/Button";
+import Button from "components/shared/Button";
 import slideAnimation from "./slide.module.scss";
 import styles from "./Sidebar.module.scss";
 
