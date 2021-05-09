@@ -9,12 +9,14 @@ const AuthContext = createContext({
   isLoading: true,
   user: null,
   login: null,
+  logout: null,
   signup: null,
 });
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [isLoading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     async function decodeAccessToken() {
@@ -34,16 +36,31 @@ export const AuthProvider = ({ children }) => {
   const login = async (user) => {
     const userData = await userService.login(user);
     setUser(userData);
+    router.push("/");
+  };
+
+  const logout = async () => {
+    await userService.logout();
+    router.push("/login");
+    setUser(null);
   };
 
   const signup = async (user) => {
     const userData = await userService.signup(user);
     setUser(userData);
+    router.push("/");
   };
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated: !!user, user, isLoading, login, signup }}
+      value={{
+        isAuthenticated: !!user,
+        user,
+        isLoading,
+        login,
+        logout,
+        signup,
+      }}
     >
       {children}
     </AuthContext.Provider>

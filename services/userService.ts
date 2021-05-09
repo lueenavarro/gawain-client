@@ -6,6 +6,8 @@ const signup = async (user) =>
 const login = async (user) =>
   httpService.post("/user/login", user).then((res) => res.data);
 
+const logout = async () => httpService.get("/user/logout");
+
 const findUser = async (email: string) =>
   httpService
     .get("/user", {
@@ -13,4 +15,4 @@ const findUser = async (email: string) =>
     })
     .then((res) => res.data);
 
-export default { signup, login, findUser };
+export default { signup, login, logout, findUser };

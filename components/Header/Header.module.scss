@@ -22,4 +22,22 @@
       color: gray;
     }
   }
+
+
+}
+
+.account {
+  margin-left: auto;
+  display: flex;
+  &__email {
+    margin: 0;
+    &::after {
+      content: "|";
+      margin: 0 10px;
+    }
+  }
+
+  &__logout {
+    cursor: pointer;
+  }
 }
