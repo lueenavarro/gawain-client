@@ -27,7 +27,9 @@ axios.interceptors.response.use(null, async (error) => {
     error.response.status < 500;
 
   if (!expectedError) {
-    toast.error("An unexpected error occured");
+    toast.error("An unexpected error occured", {
+      position: toast.POSITION.BOTTOM_RIGHT
+    });
   }
 
   return Promise.reject(error);
