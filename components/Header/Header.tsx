@@ -14,7 +14,7 @@ const Header = () => {
     <header className={styles.header}>
       <div className={styles["header__container"]}>
         <Link href="/">
-          <div className={styles["header__title"]}>ONESTEP</div>
+          <div className={styles["header__title"]}>GAWAIN</div>
         </Link>
         {isAuthenticated && (
           <Fragment>
