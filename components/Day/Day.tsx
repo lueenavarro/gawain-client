@@ -20,8 +20,8 @@ interface DayProps {
 
 const Day = ({ taskList, onAddTask, onRemove, onComplete }: DayProps) => {
   const windowsDimension = useWindowDimensions();
-  const [tasksHeight, setTasksHeight] = useState(0);
   const previousDimension = usePrevious(windowsDimension);
+  const [tasksHeight, setTasksHeight] = useState(0);
   const taskHeight = 30;
 
   useEffect(() => {
