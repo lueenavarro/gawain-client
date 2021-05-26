@@ -3,9 +3,7 @@
 
 .days {
   @include mixins.container;
-  height: 50vh;
   width: 100vw;
-  min-height: 25rem;
   margin-top: 1.25rem;
   display: grid;
   grid-template-areas:
@@ -19,6 +17,7 @@
 
 .slides {
   grid-area: slides;
+  border: 1px solid colors.$border;
   & > * {
     height: 100%;
   }
