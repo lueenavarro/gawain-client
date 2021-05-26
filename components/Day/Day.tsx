@@ -26,7 +26,7 @@ const Day = ({ taskList, onAddTask, onRemove, onComplete }: DayProps) => {
 
   useEffect(() => {
     if (windowsDimension.height !== previousDimension?.height) {
-      const absoluteMinHeight = 200;
+      const absoluteMinHeight = 210;
       const offsetFactor = 2.2;
       const minHeight = windowsDimension.height / offsetFactor;
       const minHeightRounded = minHeight - (minHeight % taskHeight);
