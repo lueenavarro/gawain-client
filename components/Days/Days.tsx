@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { CSSProperties, useEffect, useRef, useState } from "react";
 import { cloneDeep } from "lodash";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Controller } from "swiper";
@@ -26,7 +26,7 @@ const breakpoints = {
   1024: { slidesPerView: 5 },
 };
 
-const Days = () => {
+const Days = (): JSX.Element => {
   const firstDay = addDays(new Date(), -1);
   const [dates, setDates] = useState({
     start: addDays(firstDay, -daysToAdd),
@@ -143,10 +143,19 @@ const Days = () => {
       () => swiper.current.slideTo(daysToAdd, 0)
     );
 
+  const getStyle = (): CSSProperties => {
+    return taskLists
+      ? {}
+      : {
+          opacity: 0,
+          pointerEvents: "none",
+        };
+  };
+
   return (
     <React.Fragment>
       {!taskLists && <Loading />}
-      <section className={styles.days}>
+      <section className={styles.days} style={getStyle()}>
         {taskLists && (
           <div
             className={`${styles.prev} ${styles["arrow-bg"]}`}
