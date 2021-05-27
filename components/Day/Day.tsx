@@ -46,7 +46,10 @@ const Day = ({ taskList, onAddTask, onRemove, onComplete }: DayProps) => {
       <h5 className={styles["day__date"]} data-testid="date">
         {formatDate(taskList.date)}
       </h5>
-      <div className={styles["day__bg"]} style={{ minHeight: tasksHeight }}>
+      <div
+        className={styles["day__bg"]}
+        style={{ height: "100%", minHeight: tasksHeight }}
+      >
         <IDroppable
           droppableId={taskList.date}
           clone={{
