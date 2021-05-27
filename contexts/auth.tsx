@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 
+import Loading from "components/shared/Loading/Loading";
 import userService from "services/userService";
 import tokenService from "services/tokenService";
 
@@ -78,7 +79,7 @@ export const ProtectRoute = ({ children }) => {
     !isAuthenticated && !allowedRoutes.includes(router.pathname);
 
   if (isLoading) {
-    return "Wait for it...";
+    return <Loading />;
   }
 
   if (!isLoading && notAllowed) {
