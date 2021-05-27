@@ -17,7 +17,7 @@ $dot-after-color: $dot-color !default;
 
 $dot-spacing: $dot-width + $dot-width/2 !default;
 
-$left-pos: 0;
+$left-pos: 99999px;
 $x1: -$left-pos - $dot-spacing;
 $x2: -$left-pos;
 $x3: -$left-pos + $dot-spacing;
