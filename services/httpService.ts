@@ -13,8 +13,10 @@ axios.interceptors.response.use(null, async (error) => {
     error.response &&
     error.response.status >= 400 &&
     error.response.status < 500;
+  
+  const isTokenEndpoint = error.config.url.indexOf("/token") === 0;
 
-  if (expectedError) {
+  if (expectedError && !isTokenEndpoint) {
     try {
       await tokenService.refreshToken();
       await axios.request(error.config);
