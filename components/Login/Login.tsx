@@ -6,6 +6,7 @@ import Button from "components/shared/Button";
 import { useAuth } from "contexts/auth";
 
 import styles from "./Login.module.scss";
+import Input from "components/shared/Input/Input";
 
 const Login = () => {
   const { login } = useAuth();
@@ -32,7 +33,7 @@ const Login = () => {
         <form className={styles.login} onSubmit={handleSubmit}>
           <div className={styles["login__wrapper"]}>
             <h3 className={styles["login__title"]}>Login</h3>
-            <input
+            <Input
               name="email"
               type="text"
               placeholder="Email"
@@ -42,8 +43,9 @@ const Login = () => {
                 handleChange(value);
               }}
               onBlur={handleBlur}
+              error=""
             />
-            <input
+            <Input
               name="password"
               type="password"
               placeholder="Password"
@@ -53,12 +55,17 @@ const Login = () => {
                 handleChange(e);
               }}
               onBlur={handleBlur}
+              error=""
             />
-            <Button type="submit" invert={false} disabled={isSubmitting}>
+            <Button type="submit" disabled={isSubmitting}>
               Login
             </Button>
             <Link href="/signup">
-              <a className={styles["login__link"]}>Create an account</a>
+              <a>
+                <span className={styles["login__link"]}>
+                  Create an account
+                </span>
+              </a>
             </Link>
             <div className={styles["login__errors"]}>
               {wrongCred && <div>Wrong email or password</div>}

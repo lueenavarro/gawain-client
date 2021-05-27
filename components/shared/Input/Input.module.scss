@@ -1,0 +1,27 @@
+@use "styles/colors";
+
+.input {
+  background-color: white;
+  display: block;
+  border-radius: 5px;
+  border: 2px solid transparent;
+  width: 100%;
+  line-height: 200%;
+  padding: 5px 10px;
+  transition: box-shadow 0.2s;
+  border: 2px solid colors.$primary;
+  outline: none;
+  transition: box-shadow 0.2s;
+  
+  &:focus {
+    box-shadow: rgba(0, 0, 0, 0.04) 0px 5px 5px;  
+  }
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+  line-height: 20px;
+  text-align: right;
+}

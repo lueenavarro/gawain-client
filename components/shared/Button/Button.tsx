@@ -5,14 +5,14 @@ const Button = ({
   children = null,
   type = "button" as "button" | "submit" | "reset",
   disabled = false,
-  invert = false,
+  invert=false,
   onClick = null,
 }) => {
   return (
     <button
       type={type}
       disabled={disabled}
-      className={`${styles.button} ${invert ? styles.white : styles.black}`}
+      className={`${styles.button} ${invert ? styles.invert : ""}`}
       onClick={onClick ? onClick : undefined}
     >
       {children}

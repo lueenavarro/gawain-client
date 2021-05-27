@@ -4,14 +4,17 @@
   display: grid;
   place-items: center;
 
+  &__input {
+    padding-left: 5px;
+  }
+
   &__wrapper {
     position: relative;
     top: -40px;
     width: 90%;
     max-width: 400px;
     display: grid;
-    grid-template-rows: auto 30px auto 30px auto auto;
-    row-gap: 5px;
+    row-gap: 10px;
   }
 
   &__title {
@@ -21,12 +24,8 @@
 
   &__link {
     margin-top: 5px;
-    text-decoration: underline;
-  }
-
-  &__errors {
-    color: red;
-    text-align: right;
-    font-size: 12px;
+    padding-bottom: 1px;
+    border-bottom: 2px solid black;
+    display: inline-block;
   }
 }
