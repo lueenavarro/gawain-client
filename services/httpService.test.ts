@@ -31,6 +31,7 @@ beforeEach(() => {
 test("request error interceptor", () => {
   expect(mockRequestCallback({})).toStrictEqual({
     baseURL: "http://localhost:5000",
+    withCredentials: true
   });
 });
 

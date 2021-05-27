@@ -18,6 +18,11 @@ exports[`snapshot matches 1`] = `
   </h5>
   <div
     className="day__bg"
+    style={
+      Object {
+        "minHeight": 0,
+      }
+    }
   >
     <div>
       <div>

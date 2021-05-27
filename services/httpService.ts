@@ -9,26 +9,21 @@ axios.interceptors.request.use((config) => {
 });
 
 axios.interceptors.response.use(null, async (error) => {
-  const unauthorized =
-    error.response &&
-    error.response.status === 401 &&
-    error.config.url.indexOf("/token") != 0;
-
-  if (unauthorized) {
-    try {
-      await tokenService.refreshToken();
-      axios.request(error.config);
-    } catch (error) {}
-  }
-
   const expectedError =
     error.response &&
     error.response.status >= 400 &&
     error.response.status < 500;
 
+  if (expectedError) {
+    try {
+      await tokenService.refreshToken();
+      await axios.request(error.config);
+    } catch (error) {}
+  }
+
   if (!expectedError) {
     toast.error("An unexpected error occured", {
-      position: toast.POSITION.BOTTOM_RIGHT
+      position: toast.POSITION.BOTTOM_RIGHT,
     });
   }
 

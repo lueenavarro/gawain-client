@@ -6,12 +6,12 @@ import { render } from "test/react";
 import { formatDate } from "utils/dateTime";
 import Day from "./Day";
 
-jest.mock("shared/components/Droppable", () => ({
+jest.mock("components/shared/Droppable", () => ({
   __esModule: true,
   default: ({ children }) => <div>{children}</div>,
 }));
 
-jest.mock("shared/components/Draggable", () => ({
+jest.mock("components/shared/Draggable", () => ({
   __esModule: true,
   default: ({ children, index }) => <div key={index}>{children}</div>,
 }));
