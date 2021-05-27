@@ -48,7 +48,7 @@ const Day = ({ taskList, onAddTask, onRemove, onComplete }: DayProps) => {
       </h5>
       <div
         className={styles["day__bg"]}
-        style={{ height: "100%", minHeight: tasksHeight }}
+        style={{ minHeight: tasksHeight }}
       >
         <IDroppable
           droppableId={taskList.date}

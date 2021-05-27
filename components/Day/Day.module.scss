@@ -22,8 +22,8 @@
   }
 
   &__bg {
+    height: 100%;
     background-image: linear-gradient(rgba(colors.$border, 0.5) 0.1em, transparent 0.1em);
     background-size: 100% 30px;
-    flex: 1;
   }
 }
