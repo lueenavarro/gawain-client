@@ -18,7 +18,7 @@ axios.interceptors.response.use(null, async (error) => {
 
   if (expectedError && !isTokenEndpoint) {
     try {
-      await tokenService.refreshToken();
+      await tokenService.getNewAccessToken();
       await axios.request(error.config);
     } catch (error) {}
   }
