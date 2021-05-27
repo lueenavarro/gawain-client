@@ -19,24 +19,27 @@
   grid-area: slides;
   position: relative;
 
+
   & > * {
     height: 100%;
   }
 
   &::after {
-    content: "";
+    z-index: 10;
     position: absolute;
     top: 0;
     right: 0;
     bottom: 0;
     left: 0;
-    border: 1px solid colors.$border;
+    border: 2px solid colors.$primary;
+    border-radius: 5px;
+    outline: 3px solid white;
+    pointer-events: none;
+    content: "";
   }
 }
 
 .arrow-bg {
-  border: 1px solid rgba(colors.$border, 0.5);
-  border-radius: 5px;
   transition: background-color 0.1s;
   &:hover {
     background-color: colors.$primary;

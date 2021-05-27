@@ -1,8 +1,8 @@
 @use "styles/colors";
 
 .day {
-  border-right: 1px solid rgba(colors.$border, 0.5);
-  border-left: 1px solid rgba(colors.$border, 0.5);
+  border-right: 1px solid colors.$primary;
+  border-left: 1px solid colors.$primary;
   border-top: 0;
   border-bottom: 0;
   border-style: solid;
