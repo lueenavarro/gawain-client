@@ -12,22 +12,20 @@ const Login = () => {
   const { login } = useAuth();
   const [wrongCred, setWrongCred] = useState(false);
 
-  const handleSubmit = async (user) => {
-    setWrongCred(false);
-    try {
-      await login(user);
-    } catch {
-      setWrongCred(true);
-    }
-  };
-
   return (
     <Formik
       initialValues={{
         email: "",
         password: "",
       }}
-      onSubmit={handleSubmit}
+      onSubmit={async (user) => {
+        setWrongCred(false);
+        try {
+          await login(user);
+        } catch (e) {
+          setWrongCred(e.response?.status === 401);
+        }
+      }}
     >
       {({ values, isSubmitting, handleChange, handleBlur, handleSubmit }) => (
         <form className={styles.login} onSubmit={handleSubmit}>
@@ -62,9 +60,7 @@ const Login = () => {
             </Button>
             <Link href="/signup">
               <a>
-                <span className={styles["login__link"]}>
-                  Create an account
-                </span>
+                <span className={styles["login__link"]}>Create an account</span>
               </a>
             </Link>
             <div className={styles["login__errors"]}>
