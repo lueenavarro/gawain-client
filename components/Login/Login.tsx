@@ -3,10 +3,10 @@ import Link from "next/link";
 import { Formik } from "formik";
 
 import Button from "components/shared/Button";
+import Input from "components/shared/Input/Input";
 import { useAuth } from "contexts/auth";
 
 import styles from "./Login.module.scss";
-import Input from "components/shared/Input/Input";
 
 const Login = () => {
   const { login } = useAuth();
