@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useRef, useState } from "react";
+import React, { CSSProperties, useRef, useState } from "react";
 import { cloneDeep } from "lodash";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Controller } from "swiper";
