@@ -105,9 +105,9 @@ const Days = (): JSX.Element => {
 
   const handleEndReached = () => {
     if (swiper.current?.isEnd)
-      setDates((dates) => {
-        const start = addDays(dates.end, 1);
-        const end = addDays(dates.end, daysToAdd);
+      setDates((currentDates) => {
+        const start = addDays(currentDates.end, 1);
+        const end = addDays(currentDates.end, daysToAdd);
         task.current(start, end).then(pushTaskLists);
         return { start, end };
       });
@@ -115,7 +115,7 @@ const Days = (): JSX.Element => {
 
   const pushTaskLists = (data: KeyString<ITaskList>) =>
     setTaskLists(
-      (taskLists) => ({ ...spliceObject(taskLists, 0, daysToAdd), ...data }),
+      (currentTaskLists) => ({ ...spliceObject(currentTaskLists, 0, daysToAdd), ...data }),
       () => {
         const visibleSlidesCount =
           breakpoints[swiper.current.currentBreakpoint]?.slidesPerView || 1;
@@ -125,9 +125,9 @@ const Days = (): JSX.Element => {
 
   const handleBeginningReached = () => {
     if (swiper.current?.isBeginning)
-      setDates((dates) => {
-        const start = addDays(dates.start, -daysToAdd);
-        const end = addDays(dates.start, -1);
+      setDates((currentDates) => {
+        const start = addDays(currentDates.start, -daysToAdd);
+        const end = addDays(currentDates.start, -1);
 
         task.current(start, end).then(prependTaskLists);
         return { start, end };
@@ -136,9 +136,9 @@ const Days = (): JSX.Element => {
 
   const prependTaskLists = (data: KeyString<ITaskList>) =>
     setTaskLists(
-      (taskLists) => ({
+      (currentTaskLists) => ({
         ...data,
-        ...spliceObject(taskLists, swiper.current.slides.length - daysToAdd),
+        ...spliceObject(currentTaskLists, swiper.current.slides.length - daysToAdd),
       }),
       () => swiper.current.slideTo(daysToAdd, 0)
     );
